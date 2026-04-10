@@ -1,10 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Brugere</title>
 </head>
 <body>
+
+<table>
+    <thead>
+    <tr>
+        <th>Bruger ID</th>
+        <th>Navn</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="bruger : ${brugere}">
+        <td th:text="${bruger.brugerId}"></td>
+        <td th:text="${bruger.navn}"></td>
+
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>
