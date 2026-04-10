@@ -1,24 +1,35 @@
-package com.example.Onskeskyen;
+/*Denne test er på om når en bruger opretter sig om det virker og den gemmer data på bruger.
+Dette er en af hovedfunktioner for resten af hjemmsiden, derfor er den testværdi
+        */
 
+package com.example.Onskeskyen;
 import com.example.Onskeskyen.models.Bruger;
 import com.example.Onskeskyen.services.BrugerService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 public class BrugerServiceTests {
 
-    @Autowired
-    private BrugerService brugerService;
+    private BrugerService brugerService = new BrugerService();
 
     @Test
-    void opretBruger() {
-        Bruger bruger = brugerService.opretBruger("Anna", "anna@mail.com", "1234");
+    void opretBruger_opretterOgGemmerBrugerKorrekt() {
+        // Arrange
+        String navn = "Anna";
+        String email = "anna@mail.com";
+        String kodeord = "1234";
 
-        assertNotNull(bruger);
+        // Act
+        brugerService.opretBruger(navn, email, kodeord);
+        Optional<Bruger> gemtBruger = brugerService.findBruger(1);
+
+        // Assert
+        assertTrue(gemtBruger.isPresent());
+
+        Bruger bruger = gemtBruger.get();
         assertEquals("Anna", bruger.getNavn());
         assertEquals("anna@mail.com", bruger.getEmail());
         assertEquals("1234", bruger.getKodeord());
