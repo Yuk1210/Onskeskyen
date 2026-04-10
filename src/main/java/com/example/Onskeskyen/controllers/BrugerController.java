@@ -13,4 +13,12 @@ public class BrugerController {
     public String startside(){
           return "index";
   }
+    @GetMapping("/login")
+    public String loginside(){
+        return "login";
+    }
+    @GetMapping("/onskeliste")
+    public String visOnskeliste(Model model) {
+        return "onskeliste";
+    }
 }
