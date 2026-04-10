@@ -5,6 +5,8 @@ import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class BrugerController {
@@ -14,10 +16,17 @@ public class BrugerController {
     public String startside(){
           return "index";
   }
-    @GetMapping("/login")
-    public String loginside(){
-        return "login";
+    @PostMapping("/login")
+    public String login(@RequestParam String brugernavn, @RequestParam String kodeord, Model model) {
+        boolean gyldigLogin = true; // her skal du senere kalde din service
+        if (gyldigLogin) {
+            return "redirect:/onskeliste";
+        } else {
+            model.addAttribute("fejl", "Forkert brugernavn eller kodeord");
+            return "login";
+        }
     }
+
     @GetMapping("/onskeliste")
     public String visOnskeliste(Model model) {
         return "onskeliste";
