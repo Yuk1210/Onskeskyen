@@ -50,4 +50,33 @@ public class BrugerRepository {
 
         return brugere;
     }
+    public Optional<Bruger> findById(int id){
+        String sql= "SELECT * FROM bruger WHERE bruger_id = ?";
+        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)){
+
+             statement.setInt(1,id);
+             ResultSet resultSet = statement.executeQuery();
+
+             if(resultSet.next()){
+                 Timestamp ts = resultSet.getTimestamp("dato");
+                 LocalDateTime dato = null;
+
+                 if(ts != null){
+                     dato=ts.toLocalDateTime();
+                 }
+                 Bruger bruger = new Bruger(
+                         resultSet.getInt("bruger_id"),
+                         resultSet.getString("navn"),
+                         resultSet.getString("email"),
+                         resultSet.getString("kodeord"),
+                         dato
+                 );
+                 return Optional.of(bruger);
+             }
+        } catch (SQLException e){
+                 e.printStackTrace();
+        }
+        return Optional.empty();
+    }
 }
