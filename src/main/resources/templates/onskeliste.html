@@ -1,10 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fb;
+        }
+
+        header {
+            background-color: #2d6cdf;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        header h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* 🔥 Fremhæv "Tilføj ønske" */
+        .highlight {
+            background-color: white;
+            color: #2d6cdf;
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+
+        /* 📦 Profil box */
+        .profil-box {
+            width: 400px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .profil-box h2 {
+            margin-bottom: 15px;
+        }
+
+        .profil-box p {
+            margin: 10px 0;
+        }
+    </style>
 </head>
+
 <body>
+
+<header>
+    <!-- 🔥 Vis brugerens navn -->
+    <h1>Hej <span th:text="${bruger.navn}">Bruger</span></h1>
+
+    <nav>
+        <a href="/">Forside</a>
+        <a href="/onskeliste">Min ønskeliste</a>
+        <a href="/profil">Profil</a>
+        <a href="/mine-onsker">Mine ønsker</a>
+        <a href="/tilfoej-onske" class="highlight">Tilføj ønske</a>
+        <a href="/onskelister">Ønskelister</a>
+    </nav>
+</header>
+
+<!-- 📦 Profil information -->
+<div class="profil-box">
+    <h2>Min profil</h2>
+
+    <p><strong>Navn:</strong>
+        <span th:text="${bruger.navn}">Navn</span>
+    </p>
+
+    <p><strong>Email:</strong>
+        <span th:text="${bruger.email}">email@email.dk</span>
+    </p>
+
+    <p><strong>Beskrivelse:</strong>
+        <span th:text="${bruger.beskrivelse}">Beskrivelse</span>
+    </p>
+</div>
 
 </body>
 </html>

@@ -9,12 +9,11 @@ public class Bruger {
     private String kodeord;
     private LocalDateTime dato;
 
-
     public Bruger(int brugerId, String navn, String email, String kodeord, LocalDateTime dato){
-        this.brugerId=brugerId;
+        this.brugerId = brugerId;
         this.navn = navn;
         this.email = email;
-        this.kodeord= kodeord;
+        this.kodeord = kodeord;
         this.dato = dato;
     }
 
@@ -54,17 +53,19 @@ public class Bruger {
         return dato;
     }
 
-    public void sDato(LocalDateTime oprettetDato) {
+    // Rettet setter for dato
+    public void setDato(LocalDateTime dato) {
         this.dato = dato;
     }
 
     @Override
     public String toString() {
-        return "Bruger" +
-                "brugerId" + brugerId +
-                ", navn" + navn + '\'' +
-                ", email" + email +
-                ", kodeord " + kodeord +
-                ", oprettetDato " + dato;
+        return "Bruger{" +
+                "brugerId=" + brugerId +
+                ", navn='" + navn + '\'' +
+                ", email='" + email + '\'' +
+                ", kodeord='" + kodeord + '\'' +
+                ", dato=" + dato +
+                '}';
     }
 }

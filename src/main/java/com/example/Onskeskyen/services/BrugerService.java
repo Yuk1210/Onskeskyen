@@ -39,12 +39,18 @@ public class BrugerService {
     }
 
     public boolean godkendLogin(String email, String kodeord) {
+        if (email == null || !email.contains("@") || !email.contains(".com")) {
+            return false;
+        }
+        if (kodeord == null || kodeord.length() <= 8) {
+            return false;
+        }
         Optional<Bruger> brugerOpt = brugerRepository.findByEmail(email);
-
         if (brugerOpt.isPresent()) {
             Bruger bruger = brugerOpt.get();
             return bruger.getKodeord().equals(kodeord);
         }
+
         return false;
     }
 }

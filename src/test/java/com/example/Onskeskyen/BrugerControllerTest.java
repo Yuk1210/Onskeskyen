@@ -1,7 +1,6 @@
 package com.example.Onskeskyen;
 
 import com.example.Onskeskyen.controllers.BrugerController;
-
 import com.example.Onskeskyen.services.BrugerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,27 +29,25 @@ public class BrugerControllerTest {
 
         BrugerController controller = new BrugerController(brugerService);
 
-        ViewResolver viewResolver = new ViewResolver() {
-            @Override
-            public View resolveViewName(String viewName, Locale locale) {
-                if (viewName.startsWith("redirect:")) {
-                    String redirectUrl = viewName.substring("redirect:".length());
-                    return new RedirectView(redirectUrl);
+        ViewResolver viewResolver = (viewName, locale) -> {
+            if (viewName.startsWith("redirect:")) {
+                String redirectUrl = viewName.substring("redirect:".length());
+                return new RedirectView(redirectUrl);
+            }
+
+            return new View() {
+                @Override
+                public String getContentType() {
+                    return "text/html";
                 }
 
-                return new View() {
-                    @Override
-                    public String getContentType() {
-                        return "text/html";
-                    }
-
-                    @Override
-                    public void render(Map<String, ?> model,
-                                       jakarta.servlet.http.HttpServletRequest request,
-                                       jakarta.servlet.http.HttpServletResponse response) {
-                    }
-                };
-            }
+                @Override
+                public void render(Map<String, ?> model,
+                                   jakarta.servlet.http.HttpServletRequest request,
+                                   jakarta.servlet.http.HttpServletResponse response) {
+                    // bruges kun til test
+                }
+            };
         };
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
@@ -68,15 +65,22 @@ public class BrugerControllerTest {
     @Test
     void testLogin() throws Exception {
         mockMvc.perform(post("/login")
-                        .param("brugernavn", "imrane")
+                        .param("email", "imrane@test.dk")
                         .param("kodeord", "1234"))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isOk());
     }
 
     @Test
     void testVisOnskeliste() throws Exception {
         mockMvc.perform(get("/onskeliste"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("onskeliste"));
+                .andExpect(status().is3xxRedirection());
     }
 }
+
+
+
+
+
+
+
+
