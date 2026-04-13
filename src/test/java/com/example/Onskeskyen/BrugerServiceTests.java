@@ -1,5 +1,3 @@
-/*Denne unittest er på om når en bruger opretter sig om det virker og den gemmer data på bruger.
-Dette er en af hovedfunktioner for resten af hjemmsiden, derfor er den testværdi
 
 
 package com.example.Onskeskyen;
@@ -13,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BrugerServiceTests {
 
-    private BrugerService brugerService;
+    private final BrugerService brugerService;
     public BrugerServiceTests(BrugerService brugerService){
         this.brugerService=brugerService;
     }
@@ -40,4 +38,3 @@ public class BrugerServiceTests {
 }
 
 
- */
