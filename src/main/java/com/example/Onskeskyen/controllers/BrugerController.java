@@ -16,6 +16,7 @@ public class BrugerController {
     public String startside(){
           return "index";
   }
+
     @PostMapping("/login")
     public String login(@RequestParam String brugernavn, @RequestParam String kodeord, Model model) {
         boolean gyldigLogin = true; // her skal du senere kalde din service
@@ -31,4 +32,6 @@ public class BrugerController {
     public String visOnskeliste(Model model) {
         return "onskeliste";
     }
+
+    System.out.println("kj")
 }
