@@ -17,6 +17,21 @@ public class BrugerController {
           return "index";
   }
 
+  @GetMapping("/index.html")
+    public String startsideHtml() {
+          return "redirect:/";
+  }
+
+    @GetMapping("/login")
+    public String visLogin() {
+        return "login";
+    }
+
+    @GetMapping("/login.html")
+    public String visLoginHtml() {
+        return "redirect:/login";
+    }
+
     @PostMapping("/login")
     public String login(@RequestParam String brugernavn, @RequestParam String kodeord, Model model) {
         boolean gyldigLogin = services.godkendLogin(brugernavn, kodeord);
@@ -41,6 +56,4 @@ public class BrugerController {
     public String visOnskeliste(Model model) {
         return "onskeliste";
     }
-
-
 }
