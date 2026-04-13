@@ -8,6 +8,7 @@ import java.util.Optional;
 //opretBruge (navn, email, kodeord)
 //godkendLogin(email, kodeord)
 //FindBruger (bruger_id)
+//HEj
 
 
 public class BrugerService {
