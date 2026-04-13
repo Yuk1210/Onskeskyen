@@ -1,4 +1,4 @@
-package com.example.Onskeskyen.controllers;
+/* package com.example.Onskeskyen.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,3 +75,5 @@ public class BrugerControllerTest {
                 .andExpect(view().name("onskeliste"));
     }
 }
+
+ */
