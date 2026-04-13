@@ -1,4 +1,6 @@
-package com.example.Onskeskyen.controllers;
+
+
+import com.example.Onskeskyen.controllers.BrugerController;
 
 import com.example.Onskeskyen.services.BrugerService;
 import org.junit.jupiter.api.BeforeEach;

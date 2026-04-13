@@ -13,7 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BrugerServiceTests {
 
-    private BrugerService brugerService = new BrugerService();
+    private BrugerService brugerService;
+    public BrugerServiceTests(BrugerService brugerService){
+        this.brugerService=brugerService;
+    }
 
     @Test
     void opretBruger_opretterOgGemmerBrugerKorrekt() {
