@@ -20,7 +20,9 @@
 
         <div id="loginForm" class="form active">
             <form th:action="@{/login}" method="post">
-                <input type="text" name="brugernavn" placeholder="Email" required>
+                <!-- 🔥 RETTET HER -->
+                <input type="text" name="email" placeholder="Email" required>
+
                 <input type="password" name="kodeord" placeholder="Kodeord" required>
                 <button type="submit">Login</button>
             </form>

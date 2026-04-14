@@ -21,8 +21,8 @@ public class BrugerService {
         return brugerRepository.findAll();
     }
 
-    public Optional<Bruger> findBruger(int brugerId) {
-        return brugerRepository.findById(brugerId);
+    public Bruger findBruger(int brugerId) {
+        return brugerRepository.findById(brugerId).orElse(null);
     }
 
     public void opretBruger(String navn, String email, String kodeord) {
@@ -39,18 +39,23 @@ public class BrugerService {
     }
 
     public boolean godkendLogin(String email, String kodeord) {
-        if (email == null || !email.contains("@") || !email.contains(".com")) {
+
+        // simpel validering
+        if (email == null || !email.contains("@")) {
             return false;
-        }
-        if (kodeord == null || kodeord.length() <= 8) {
-            return false;
-        }
-        Optional<Bruger> brugerOpt = brugerRepository.findByEmail(email);
-        if (brugerOpt.isPresent()) {
-            Bruger bruger = brugerOpt.get();
-            return bruger.getKodeord().equals(kodeord);
         }
 
-        return false;
+        if (kodeord == null || kodeord.length() < 4) {
+            return false;
+        }
+        Bruger bruger = findBrugerByEmail(email);
+
+        if (bruger == null) {
+            return false;
+        }
+        return bruger.getKodeord().equals(kodeord);
+    }
+    public Bruger findBrugerByEmail(String email) {
+        return brugerRepository.findByEmail(email).orElse(null);
     }
 }
