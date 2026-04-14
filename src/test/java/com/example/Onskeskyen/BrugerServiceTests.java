@@ -38,7 +38,7 @@ class BrugerServiceSimpleTests {
         assertEquals(navn, gemtBruger.getNavn());
         assertEquals(email, gemtBruger.getEmail());
         assertEquals(kodeord, gemtBruger.getKodeord());
-        assertNotNull(gemtBruger.getDato());
+        assertNotNull(gemtBruger.getOprettetDato());
     }
 
     @Test

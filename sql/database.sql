@@ -8,7 +8,7 @@ CREATE TABLE bruger
     navn      VARCHAR(100) NOT NULL,
     email     VARCHAR(50)  NOT NULL,
     kodeord   VARCHAR(100) NOT NULL,
-    dato      DATE NULL
+    oprettet_dato      DATETIME NULL
 );
 
 CREATE TABLE kategori
