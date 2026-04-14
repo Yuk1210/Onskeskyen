@@ -126,7 +126,7 @@ public class BrugerRepository {
             statement.setString(1, bruger.getNavn());
             statement.setString(2, bruger.getEmail());
             statement.setString(3, bruger.getKodeord());
-            statement.setTimestamp(4, Timestamp.valueOf(bruger.getDato()));
+            statement.setTimestamp(4, Timestamp.valueOf(bruger.getOprettetDato()));
 
             statement.executeUpdate();
 
