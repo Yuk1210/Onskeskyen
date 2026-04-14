@@ -7,14 +7,14 @@ public class Bruger {
     private String navn;
     private String email;
     private String kodeord;
-    private LocalDateTime dato;
+    private LocalDateTime oprettetDato;
 
-    public Bruger(int brugerId, String navn, String email, String kodeord, LocalDateTime dato){
+    public Bruger(int brugerId, String navn, String email, String kodeord, LocalDateTime oprettetDato){
         this.brugerId = brugerId;
         this.navn = navn;
         this.email = email;
         this.kodeord = kodeord;
-        this.dato = dato;
+        this.oprettetDato = oprettetDato;
     }
 
     public int getBrugerId() {
@@ -49,13 +49,13 @@ public class Bruger {
         this.kodeord = kodeord;
     }
 
-    public LocalDateTime getDato() {
-        return dato;
+    public LocalDateTime getOprettetDato() {
+        return oprettetDato;
     }
 
     // Rettet setter for dato
-    public void setDato(LocalDateTime dato) {
-        this.dato = dato;
+    public void setOprettetDato(LocalDateTime oprettetDato) {
+        this.oprettetDato = oprettetDato;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Bruger {
                 ", navn='" + navn + '\'' +
                 ", email='" + email + '\'' +
                 ", kodeord='" + kodeord + '\'' +
-                ", dato=" + dato +
+                ", dato=" + oprettetDato +
                 '}';
     }
 }

@@ -2,11 +2,10 @@
 <dataSource name="Onskeskyen@localhost">
   <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.53">
     <root id="1">
-      <DefaultCasing>mixed/mixed</DefaultCasing>
+      <DefaultCasing>lower/lower</DefaultCasing>
       <DefaultEngine>InnoDB</DefaultEngine>
       <DefaultTmpEngine>InnoDB</DefaultTmpEngine>
-      <Grants>|root||root|localhost|ALLOW_NONEXISTENT_DEFINER|G
-|root||root|localhost|ALTER|G
+      <Grants>|root||root|localhost|ALTER|G
 |root||root|localhost|ALTER ROUTINE|G
 |root||root|localhost|APPLICATION_PASSWORD_ADMIN|G
 |root||mysql.infoschema|localhost|AUDIT_ABORT_EXEMPT|G
@@ -31,7 +30,6 @@
 |root||root|localhost|CREATE TEMPORARY TABLES|G
 |root||root|localhost|CREATE USER|G
 |root||root|localhost|CREATE VIEW|G
-|root||root|localhost|CREATE_SPATIAL_REFERENCE_SYSTEM|G
 |root||root|localhost|DELETE|G
 |root||root|localhost|DROP|G
 |root||root|localhost|DROP ROLE|G
@@ -44,7 +42,6 @@
 |root||mysql.sys|localhost|FIREWALL_EXEMPT|G
 |root||root|localhost|FIREWALL_EXEMPT|G
 |root||root|localhost|FLUSH_OPTIMIZER_COSTS|G
-|root||root|localhost|FLUSH_PRIVILEGES|G
 |root||root|localhost|FLUSH_STATUS|G
 |root||root|localhost|FLUSH_TABLES|G
 |root||root|localhost|FLUSH_USER_RESOURCES|G
@@ -55,7 +52,6 @@
 |root||root|localhost|INNODB_REDO_LOG_ENABLE|G
 |root||root|localhost|INSERT|G
 |root||root|localhost|LOCK TABLES|G
-|root||root|localhost|OPTIMIZE_LOCAL_TABLE|G
 |root||root|localhost|PASSWORDLESS_USER_ADMIN|G
 |root||mysql.session|localhost|PERSIST_RO_VARIABLES_ADMIN|G
 |root||root|localhost|PERSIST_RO_VARIABLES_ADMIN|G
@@ -75,7 +71,7 @@
 |root||root|localhost|SERVICE_CONNECTION_ADMIN|G
 |root||mysql.session|localhost|SESSION_VARIABLES_ADMIN|G
 |root||root|localhost|SESSION_VARIABLES_ADMIN|G
-|root||root|localhost|SET_ANY_DEFINER|G
+|root||root|localhost|SET_USER_ID|G
 |root||root|localhost|SHOW DATABASES|G
 |root||root|localhost|SHOW VIEW|G
 |root||root|localhost|SHOW_ROUTINE|G
@@ -91,14 +87,13 @@
 |root||root|localhost|SYSTEM_VARIABLES_ADMIN|G
 |root||root|localhost|TABLE_ENCRYPTION_ADMIN|G
 |root||root|localhost|TELEMETRY_LOG_ADMIN|G
-|root||root|localhost|TRANSACTION_GTID_TAG|G
 |root||root|localhost|TRIGGER|G
 |root||root|localhost|UPDATE|G
 |root||root|localhost|XA_RECOVER_ADMIN|G
 |root||root|localhost|grant option|G
 performance_schema|schema||mysql.session|localhost|SELECT|G
 sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
-      <ServerVersion>9.6.0</ServerVersion>
+      <ServerVersion>8.0.44</ServerVersion>
     </root>
     <collation id="2" parent="1" name="armscii8_bin">
       <Charset>armscii8</Charset>
@@ -999,355 +994,369 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <collation id="287" parent="1" name="utf8mb4_zh_0900_as_cs">
       <Charset>utf8mb4</Charset>
     </collation>
-    <schema id="288" parent="1" name="information_schema">
+    <schema id="288" parent="1" name="books">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="289" parent="1" name="games">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="290" parent="1" name="games2">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="291" parent="1" name="information_schema">
       <CollationName>utf8mb3_general_ci</CollationName>
     </schema>
-    <schema id="289" parent="1" name="mysql">
+    <schema id="292" parent="1" name="my_database">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="290" parent="1" name="onskeskyen">
+    <schema id="293" parent="1" name="mysql">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="294" parent="1" name="onskeskyen">
       <AutoIntrospectionLevel>3</AutoIntrospectionLevel>
       <LastIntrospectionLevel>3</LastIntrospectionLevel>
-      <LastIntrospectionLocalTimestamp>2026-04-14.11:01:25</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2026-04-10.10:29:55</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="291" parent="1" name="performance_schema">
+    <schema id="295" parent="1" name="performance_schema">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="292" parent="1" name="pokemon">
+    <schema id="296" parent="1" name="pokemon">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="293" parent="1" name="seat_reservations">
+    <schema id="297" parent="1" name="seat_reservation">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="294" parent="1" name="sys">
+    <schema id="298" parent="1" name="sys">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="295" parent="1" name="tech_company">
+    <schema id="299" parent="1" name="tech_company">
+      <CollationName>utf8mb3_general_ci</CollationName>
+    </schema>
+    <schema id="300" parent="1" name="video_games">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="296" parent="1" name="worldcountries">
+    <schema id="301" parent="1" name="worldcountries">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <user id="297" parent="1" name="mysql.infoschema">
+    <user id="302" parent="1" name="mysql.infoschema">
       <CanLogin>0</CanLogin>
       <Host>localhost</Host>
       <Plugin>caching_sha2_password</Plugin>
     </user>
-    <user id="298" parent="1" name="mysql.session">
+    <user id="303" parent="1" name="mysql.session">
       <CanLogin>0</CanLogin>
       <Host>localhost</Host>
       <Plugin>caching_sha2_password</Plugin>
     </user>
-    <user id="299" parent="1" name="mysql.sys">
+    <user id="304" parent="1" name="mysql.sys">
       <CanLogin>0</CanLogin>
       <Host>localhost</Host>
       <Plugin>caching_sha2_password</Plugin>
     </user>
-    <user id="300" parent="1" name="root">
+    <user id="305" parent="1" name="root">
       <Host>localhost</Host>
       <Plugin>caching_sha2_password</Plugin>
     </user>
-    <table id="301" parent="290" name="bruger">
+    <table id="306" parent="294" name="bruger">
       <DetailsLevel>3</DetailsLevel>
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="302" parent="290" name="kategori">
+    <table id="307" parent="294" name="kategori">
       <DetailsLevel>3</DetailsLevel>
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="303" parent="290" name="produkt">
+    <table id="308" parent="294" name="produkt">
       <DetailsLevel>3</DetailsLevel>
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="304" parent="290" name="reservation">
+    <table id="309" parent="294" name="reservation">
       <DetailsLevel>3</DetailsLevel>
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="305" parent="290" name="ønskeliste">
+    <table id="310" parent="294" name="ønskeliste">
       <DetailsLevel>3</DetailsLevel>
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="306" parent="290" name="ønskeliste_item">
+    <table id="311" parent="294" name="ønskeliste_item">
       <DetailsLevel>3</DetailsLevel>
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <column id="307" parent="301" name="bruger_id">
-      <AutoIncrement>4</AutoIncrement>
+    <column id="312" parent="306" name="bruger_id">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="308" parent="301" name="navn">
+    <column id="313" parent="306" name="navn">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="309" parent="301" name="email">
+    <column id="314" parent="306" name="email">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>varchar(50)|0s</StoredType>
     </column>
-    <column id="310" parent="301" name="kodeord">
+    <column id="315" parent="306" name="kodeord">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="311" parent="301" name="dato">
+    <column id="316" parent="306" name="dato">
       <Position>5</Position>
-      <StoredType>datetime|0s</StoredType>
+      <StoredType>date|0s</StoredType>
     </column>
-    <index id="312" parent="301" name="PRIMARY">
+    <index id="317" parent="306" name="PRIMARY">
       <ColNames>bruger_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="313" parent="301" name="PRIMARY">
+    <key id="318" parent="306" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="314" parent="302" name="kategori_id">
+    <column id="319" parent="307" name="kategori_id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="315" parent="302" name="navn">
+    <column id="320" parent="307" name="navn">
       <Position>2</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <index id="316" parent="302" name="PRIMARY">
+    <index id="321" parent="307" name="PRIMARY">
       <ColNames>kategori_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="317" parent="302" name="PRIMARY">
+    <key id="322" parent="307" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="318" parent="303" name="produkt_id">
+    <column id="323" parent="308" name="produkt_id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="319" parent="303" name="kategori_id">
+    <column id="324" parent="308" name="kategori_id">
       <Position>2</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="320" parent="303" name="navn">
+    <column id="325" parent="308" name="navn">
       <Position>3</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="321" parent="303" name="beskrivelse">
+    <column id="326" parent="308" name="beskrivelse">
       <Position>4</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="322" parent="303" name="pris">
+    <column id="327" parent="308" name="pris">
       <Position>5</Position>
       <StoredType>decimal(10,2 digit)|0s</StoredType>
     </column>
-    <column id="323" parent="303" name="produkt_link">
+    <column id="328" parent="308" name="produkt_link">
       <Position>6</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="324" parent="303" name="billede_link">
+    <column id="329" parent="308" name="billede_link">
       <Position>7</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <foreign-key id="325" parent="303" name="fk_produkt_kategori">
+    <foreign-key id="330" parent="308" name="produkt_ibfk_1">
       <ColNames>kategori_id</ColNames>
       <RefColNames>kategori_id</RefColNames>
       <RefTableName>kategori</RefTableName>
     </foreign-key>
-    <index id="326" parent="303" name="PRIMARY">
+    <index id="331" parent="308" name="PRIMARY">
       <ColNames>produkt_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="327" parent="303" name="idx_produkt_kategori_id">
+    <index id="332" parent="308" name="kategori_id">
       <ColNames>kategori_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="328" parent="303" name="PRIMARY">
+    <key id="333" parent="308" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="329" parent="304" name="reservation_id">
+    <column id="334" parent="309" name="reservation_id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="330" parent="304" name="ønskeliste_item_id">
+    <column id="335" parent="309" name="ønskeliste_item_id">
       <Position>2</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="331" parent="304" name="bruger_id">
+    <column id="336" parent="309" name="bruger_id">
       <Position>3</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="332" parent="304" name="antal">
+    <column id="337" parent="309" name="antal">
       <Position>4</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="333" parent="304" name="købt">
+    <column id="338" parent="309" name="købt">
       <Position>5</Position>
       <StoredType>tinyint(1)|0s</StoredType>
     </column>
-    <column id="334" parent="304" name="dato">
+    <column id="339" parent="309" name="dato">
       <Position>6</Position>
-      <StoredType>datetime|0s</StoredType>
+      <StoredType>date|0s</StoredType>
     </column>
-    <foreign-key id="335" parent="304" name="fk_reservation_onskeliste_item">
+    <foreign-key id="340" parent="309" name="reservation_ibfk_1">
       <ColNames>ønskeliste_item_id</ColNames>
       <RefColNames>ønskeliste_item_id</RefColNames>
       <RefTableName>ønskeliste_item</RefTableName>
     </foreign-key>
-    <foreign-key id="336" parent="304" name="fk_reservation_bruger">
+    <foreign-key id="341" parent="309" name="reservation_ibfk_2">
       <ColNames>bruger_id</ColNames>
       <RefColNames>bruger_id</RefColNames>
       <RefTableName>bruger</RefTableName>
     </foreign-key>
-    <index id="337" parent="304" name="PRIMARY">
+    <index id="342" parent="309" name="PRIMARY">
       <ColNames>reservation_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="338" parent="304" name="idx_reservation_onskeliste_item_id">
+    <index id="343" parent="309" name="ønskeliste_item_id">
       <ColNames>ønskeliste_item_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="339" parent="304" name="idx_reservation_bruger_id">
+    <index id="344" parent="309" name="bruger_id">
       <ColNames>bruger_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="340" parent="304" name="PRIMARY">
+    <key id="345" parent="309" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="341" parent="305" name="ønskeliste_id">
+    <column id="346" parent="310" name="ønskeliste_id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="342" parent="305" name="ejer_bruger_id">
+    <column id="347" parent="310" name="ejer_bruger_id">
       <Position>2</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="343" parent="305" name="titel">
+    <column id="348" parent="310" name="titel">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="344" parent="305" name="beskrivelse">
+    <column id="349" parent="310" name="beskrivelse">
       <Position>4</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="345" parent="305" name="offentlig">
+    <column id="350" parent="310" name="offentlig">
       <Position>5</Position>
       <StoredType>tinyint(1)|0s</StoredType>
     </column>
-    <column id="346" parent="305" name="delingskode">
+    <column id="351" parent="310" name="delingskode">
       <Position>6</Position>
       <StoredType>varchar(50)|0s</StoredType>
     </column>
-    <column id="347" parent="305" name="delingslink">
+    <column id="352" parent="310" name="delingslink">
       <Position>7</Position>
       <StoredType>varchar(50)|0s</StoredType>
     </column>
-    <column id="348" parent="305" name="dato">
+    <column id="353" parent="310" name="dato">
       <Position>8</Position>
-      <StoredType>datetime|0s</StoredType>
+      <StoredType>date|0s</StoredType>
     </column>
-    <foreign-key id="349" parent="305" name="fk_onskeliste_bruger">
+    <foreign-key id="354" parent="310" name="ønskeliste_ibfk_1">
       <ColNames>ejer_bruger_id</ColNames>
       <RefColNames>bruger_id</RefColNames>
       <RefTableName>bruger</RefTableName>
     </foreign-key>
-    <index id="350" parent="305" name="PRIMARY">
+    <index id="355" parent="310" name="PRIMARY">
       <ColNames>ønskeliste_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="351" parent="305" name="idx_onskeliste_ejer_bruger_id">
+    <index id="356" parent="310" name="ejer_bruger_id">
       <ColNames>ejer_bruger_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="352" parent="305" name="PRIMARY">
+    <key id="357" parent="310" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="353" parent="306" name="ønskeliste_item_id">
+    <column id="358" parent="311" name="ønskeliste_item_id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="354" parent="306" name="ønskeliste_id">
+    <column id="359" parent="311" name="ønskeliste_id">
       <Position>2</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="355" parent="306" name="produkt_id">
+    <column id="360" parent="311" name="produkt_id">
       <Position>3</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="356" parent="306" name="note">
+    <column id="361" parent="311" name="note">
       <Position>4</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="357" parent="306" name="prioritet">
+    <column id="362" parent="311" name="prioritet">
       <Position>5</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="358" parent="306" name="antal">
+    <column id="363" parent="311" name="antal">
       <Position>6</Position>
       <StoredType>int|0s</StoredType>
     </column>
-    <column id="359" parent="306" name="købt">
+    <column id="364" parent="311" name="købt">
       <Position>7</Position>
       <StoredType>tinyint(1)|0s</StoredType>
     </column>
-    <column id="360" parent="306" name="dato">
+    <column id="365" parent="311" name="dato">
       <Position>8</Position>
-      <StoredType>datetime|0s</StoredType>
+      <StoredType>date|0s</StoredType>
     </column>
-    <foreign-key id="361" parent="306" name="fk_onskeliste_item_onskeliste">
+    <foreign-key id="366" parent="311" name="ønskeliste_item_ibfk_1">
       <ColNames>ønskeliste_id</ColNames>
       <RefColNames>ønskeliste_id</RefColNames>
       <RefTableName>ønskeliste</RefTableName>
     </foreign-key>
-    <foreign-key id="362" parent="306" name="fk_onskeliste_item_produkt">
+    <foreign-key id="367" parent="311" name="ønskeliste_item_ibfk_2">
       <ColNames>produkt_id</ColNames>
       <RefColNames>produkt_id</RefColNames>
       <RefTableName>produkt</RefTableName>
     </foreign-key>
-    <index id="363" parent="306" name="PRIMARY">
+    <index id="368" parent="311" name="PRIMARY">
       <ColNames>ønskeliste_item_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="364" parent="306" name="idx_onskeliste_item_onskeliste_id">
+    <index id="369" parent="311" name="ønskeliste_id">
       <ColNames>ønskeliste_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="365" parent="306" name="idx_onskeliste_item_produkt_id">
+    <index id="370" parent="311" name="produkt_id">
       <ColNames>produkt_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="366" parent="306" name="PRIMARY">
+    <key id="371" parent="311" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
