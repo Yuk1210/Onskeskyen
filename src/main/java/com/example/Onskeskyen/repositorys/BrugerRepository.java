@@ -1,6 +1,7 @@
 package com.example.Onskeskyen.repositorys;
 
 import com.example.Onskeskyen.models.Bruger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -12,9 +13,22 @@ import java.util.Optional;
 @Repository
 public class BrugerRepository {
 
-    private String dbUrl = "jdbc:mysql://localhost:3306/Onskeskyen";
-    private String username = "root";
-    private String password = "root12341";
+    private final String dbUrl;
+    private final String username;
+    private final String password;
+
+    public BrugerRepository(
+            @Value("${app.database.host}") String host,
+            @Value("${app.database.port}") String port,
+            @Value("${app.database.name}") String databaseName,
+            @Value("${app.database.username}") String username,
+            @Value("${app.database.password}") String password
+    ) {
+        this.dbUrl = "jdbc:mysql://" + host + ":" + port + "/" + databaseName
+                + "?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8";
+        this.username = username;
+        this.password = password;
+    }
 
     public List<Bruger> findAll() {
         List<Bruger> brugere = new ArrayList<>();
@@ -44,7 +58,7 @@ public class BrugerRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Kunne ikke hente brugere fra databasen", e);
         }
 
         return brugere;
@@ -79,7 +93,7 @@ public class BrugerRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Kunne ikke hente bruger med id " + id, e);
         }
 
         return Optional.empty();
@@ -99,7 +113,7 @@ public class BrugerRepository {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Kunne ikke opdatere bruger med id " + id, e);
         }
     }
 
@@ -113,7 +127,7 @@ public class BrugerRepository {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Kunne ikke slette bruger med id " + id, e);
         }
     }
 
@@ -131,7 +145,7 @@ public class BrugerRepository {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Kunne ikke gemme bruger med email " + bruger.getEmail(), e);
         }
     }
 
@@ -164,14 +178,10 @@ public class BrugerRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Kunne ikke hente bruger med email " + email, e);
         }
 
         return Optional.empty();
     }
 }
-
-
-
-
 
