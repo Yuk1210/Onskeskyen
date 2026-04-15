@@ -10,9 +10,9 @@ import java.util.List;
 @Repository
 public class OnskeRepository {
 
-    private final String dbUrl = "jdbc:mysql://localhost:3306/Onskeskyen";
-    private final String username = "root";
-    private final String password = "root12341";
+    private String dbUrl = System.getenv("DB_URL");
+    private String username = System.getenv("DB_USER");
+    private String password = System.getenv("DB_PASSWORD");
 
     public List<Onske> hentOnsker(int brugerId) {
         List<Onske> onsker = new ArrayList<>();

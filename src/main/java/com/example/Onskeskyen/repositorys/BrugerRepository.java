@@ -12,9 +12,9 @@ import java.util.Optional;
 @Repository
 public class BrugerRepository {
 
-    private String dbUrl = "jdbc:mysql://localhost:3306/Onskeskyen";
-    private String username = "root";
-    private String password = "root12341";
+    private String dbUrl = System.getenv("DB_URL");
+    private String username = System.getenv("DB_USER");
+    private String password = System.getenv("DB_PASSWORD");
 
     public List<Bruger> findAll() {
         List<Bruger> brugere = new ArrayList<>();
