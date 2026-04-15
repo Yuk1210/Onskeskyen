@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 @Controller
 public class BrugerController {
 
@@ -40,8 +42,15 @@ public class BrugerController {
         boolean gyldigLogin = services.godkendLogin(email, kodeord);
 
         if (gyldigLogin) {
-            session.setAttribute("loggetIndEmail", email);
-            return "redirect:/onskeliste";
+            Bruger brugere = services.findBrugerByEmail(email);
+            if(brugere !=null) {
+                session.setAttribute("brugerId", brugere.getBrugerId());
+                session.setAttribute("loggetIndEmail", email);
+                return "redirect:/onskeliste";
+            }else {
+                model.addAttribute("fejl", "brugeren blev ikke fundet");
+                return "login";
+            }
         } else {
             model.addAttribute("fejl", "Forkert email eller adgangskode");
             return "login";
