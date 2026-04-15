@@ -1,6 +1,7 @@
 package com.example.Onskeskyen.repositorys;
 
 import com.example.Onskeskyen.models.Bruger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -12,9 +13,19 @@ import java.util.Optional;
 @Repository
 public class BrugerRepository {
 
-    private String dbUrl = "jdbc:mysql://localhost:3306/Onskeskyen";
-    private String username = "root";
-    private String password = "root12341";
+    private final String dbUrl;
+    private final String username;
+    private final String password;
+
+    public BrugerRepository(
+            @Value("${db.url}") String dbUrl,
+            @Value("${db.username}") String username,
+            @Value("${db.password}") String password
+    ) {
+        this.dbUrl = dbUrl;
+        this.username = username;
+        this.password = password;
+    }
 
     public List<Bruger> findAll() {
         List<Bruger> brugere = new ArrayList<>();
@@ -25,12 +36,8 @@ public class BrugerRepository {
              ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
-                Timestamp ts = resultSet.getTimestamp("dato");
-                LocalDateTime dato = null;
-
-                if (ts != null) {
-                    dato = ts.toLocalDateTime();
-                }
+                Timestamp ts = resultSet.getTimestamp("oprettet_dato");
+                LocalDateTime dato = ts != null ? ts.toLocalDateTime() : null;
 
                 Bruger bruger = new Bruger(
                         resultSet.getInt("bruger_id"),
@@ -60,12 +67,8 @@ public class BrugerRepository {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                Timestamp ts = resultSet.getTimestamp("dato");
-                LocalDateTime dato = null;
-
-                if (ts != null) {
-                    dato = ts.toLocalDateTime();
-                }
+                Timestamp ts = resultSet.getTimestamp("oprettet_dato");
+                LocalDateTime dato = ts != null ? ts.toLocalDateTime() : null;
 
                 Bruger bruger = new Bruger(
                         resultSet.getInt("bruger_id"),
@@ -83,6 +86,24 @@ public class BrugerRepository {
         }
 
         return Optional.empty();
+    }
+
+    public void save(Bruger bruger) {
+        String sql = "INSERT INTO bruger (navn, email, kodeord, oprettet_dato) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, bruger.getNavn());
+            statement.setString(2, bruger.getEmail());
+            statement.setString(3, bruger.getKodeord());
+            statement.setTimestamp(4, Timestamp.valueOf(bruger.getOprettetDato()));
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateById(int id, String navn, String email, String kodeord) {
@@ -117,24 +138,6 @@ public class BrugerRepository {
         }
     }
 
-    public void save(Bruger bruger) {
-        String sql = "INSERT INTO bruger (navn, email, kodeord, dato) VALUES (?, ?, ?, ?)";
-
-        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, bruger.getNavn());
-            statement.setString(2, bruger.getEmail());
-            statement.setString(3, bruger.getKodeord());
-            statement.setTimestamp(4, Timestamp.valueOf(bruger.getOprettetDato()));
-
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public Optional<Bruger> findByEmail(String email) {
         String sql = "SELECT * FROM bruger WHERE email = ?";
 
@@ -145,12 +148,8 @@ public class BrugerRepository {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                Timestamp ts = resultSet.getTimestamp("dato");
-                LocalDateTime dato = null;
-
-                if (ts != null) {
-                    dato = ts.toLocalDateTime();
-                }
+                Timestamp ts = resultSet.getTimestamp("oprettet_dato");
+                LocalDateTime dato = ts != null ? ts.toLocalDateTime() : null;
 
                 Bruger bruger = new Bruger(
                         resultSet.getInt("bruger_id"),
@@ -170,8 +169,3 @@ public class BrugerRepository {
         return Optional.empty();
     }
 }
-
-
-
-
-

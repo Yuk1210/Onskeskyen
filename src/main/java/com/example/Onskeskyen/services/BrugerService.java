@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BrugerService {
@@ -39,21 +38,23 @@ public class BrugerService {
     }
 
     public boolean godkendLogin(String email, String kodeord) {
-    email = email.trim();
-    kodeord = kodeord.trim();
+        email = email.trim();
+        kodeord = kodeord.trim();
 
-        System.out.println("Login email: " +email);
+        System.out.println("Login email: " + email);
         Bruger bruger = findBrugerByEmail(email);
 
-        if(bruger == null){
+        if (bruger == null) {
             System.out.println("bruger blev ikke fundet i DB");
             return false;
         }
+
         System.out.println("DB email: " + bruger.getEmail());
         System.out.println("DB kodeord: " + bruger.getKodeord());
 
-        return  bruger.getKodeord().equals(kodeord);
+        return bruger.getKodeord().equals(kodeord);
     }
+
     public Bruger findBrugerByEmail(String email) {
         return brugerRepository.findByEmail(email).orElse(null);
     }
