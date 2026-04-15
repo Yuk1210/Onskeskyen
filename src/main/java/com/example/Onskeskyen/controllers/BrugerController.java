@@ -42,9 +42,9 @@ public class BrugerController {
         boolean gyldigLogin = services.godkendLogin(email, kodeord);
 
         if (gyldigLogin) {
-            Bruger brugere = services.findBrugerByEmail(email);
-            if(brugere !=null) {
-                session.setAttribute("brugerId", brugere.getBrugerId());
+            Bruger bruger = services.findBrugerByEmail(email);
+            if(bruger !=null) {
+                session.setAttribute("brugerId", bruger.getBrugerId());
                 session.setAttribute("loggetIndEmail", email);
                 return "redirect:/onskeliste";
             }else {
