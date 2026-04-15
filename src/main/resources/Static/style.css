@@ -92,4 +92,89 @@ footer {
     main {
         grid-template-columns: 1fr;
     }
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f7f6;
+        color: #333;
+    }
+
+    header {
+        background-color: cornflowerblue;
+        padding: 20px;
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    nav {
+        background-color: #e8f1ef;
+        padding: 14px 24px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 18px;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #2f5d50;
+        font-weight: bold;
+    }
+
+    .login-btn {
+        padding: 0.8rem 1.6rem;
+        background: #f4efe6;
+        border-radius: 999px;
+    }
+
+    main {
+        max-width: 1000px;
+        margin: 30px auto;
+        display: grid;
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .box {
+        background-color: white;
+        border: 2px solid #d9e4e1;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .wish-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .wish-list li {
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+
+    .booked {
+        border-left: 6px solid red;
+    }
+
+    .available {
+        border-left: 6px solid green;
+    }
+
+    .status {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+    }
+
+    .status-free {
+        background-color: #dff3e2;
+    }
+
+    .status-booked {
+        background-color: #f8dede;
+    }
 }

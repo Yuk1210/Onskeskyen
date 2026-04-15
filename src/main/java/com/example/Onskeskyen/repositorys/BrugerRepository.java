@@ -17,11 +17,6 @@ public class BrugerRepository {
     private String password = System.getenv("DB_PASSWORD");
 
     public List<Bruger> findAll() {
-
-        System.out.println("DB_URL: " + dbUrl);
-        System.out.println("DB_USER: " + username);
-        System.out.println("DB_PASSWORD: " + password);
-
         List<Bruger> brugere = new ArrayList<>();
         String sql = "SELECT * FROM bruger";
 
@@ -31,11 +26,7 @@ public class BrugerRepository {
 
             while (resultSet.next()) {
                 Timestamp ts = resultSet.getTimestamp("oprettet_dato");
-                LocalDateTime dato = null;
-
-                if (ts != null) {
-                    dato = ts.toLocalDateTime();
-                }
+                LocalDateTime dato = ts != null ? ts.toLocalDateTime() : null;
 
                 Bruger bruger = new Bruger(
                         resultSet.getInt("bruger_id"),
@@ -55,22 +46,18 @@ public class BrugerRepository {
         return brugere;
     }
 
-    public Optional<Bruger> findByEmail(String email) {
-        String sql = "SELECT * FROM bruger WHERE email = ?";
+    public Optional<Bruger> findById(int id) {
+        String sql = "SELECT * FROM bruger WHERE bruger_id = ?";
 
         try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, email);
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 Timestamp ts = resultSet.getTimestamp("oprettet_dato");
-                LocalDateTime dato = null;
-
-                if (ts != null) {
-                    dato = ts.toLocalDateTime();
-                }
+                LocalDateTime dato = ts != null ? ts.toLocalDateTime() : null;
 
                 Bruger bruger = new Bruger(
                         resultSet.getInt("bruger_id"),
@@ -94,7 +81,7 @@ public class BrugerRepository {
         String sql = "INSERT INTO bruger (navn, email, kodeord, oprettet_dato) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, bruger.getNavn());
             statement.setString(2, bruger.getEmail());
@@ -103,8 +90,76 @@ public class BrugerRepository {
 
             statement.executeUpdate();
 
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                bruger.setBrugerId(generatedKeys.getInt(1));
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateById(int id, String navn, String email, String kodeord) {
+        String sql = "UPDATE bruger SET navn = ?, email = ?, kodeord = ? WHERE bruger_id = ?";
+
+        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, navn);
+            statement.setString(2, email);
+            statement.setString(3, kodeord);
+            statement.setInt(4, id);
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteById(int id) {
+        String sql = "DELETE FROM bruger WHERE bruger_id = ?";
+
+        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Optional<Bruger> findByEmail(String email) {
+        String sql = "SELECT * FROM bruger WHERE email = ?";
+
+        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                Timestamp ts = resultSet.getTimestamp("oprettet_dato");
+                LocalDateTime dato = ts != null ? ts.toLocalDateTime() : null;
+
+                Bruger bruger = new Bruger(
+                        resultSet.getInt("bruger_id"),
+                        resultSet.getString("navn"),
+                        resultSet.getString("email"),
+                        resultSet.getString("kodeord"),
+                        dato
+                );
+
+                return Optional.of(bruger);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
     }
 }
