@@ -24,6 +24,7 @@ public class BrugerService {
         return brugerRepository.findById(brugerId).orElse(null);
     }
 
+
     public void opretBruger(String navn, String email, String kodeord) {
         Bruger bruger = new Bruger(0, navn, email, kodeord, LocalDateTime.now());
         brugerRepository.save(bruger);

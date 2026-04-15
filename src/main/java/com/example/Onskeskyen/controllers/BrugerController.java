@@ -2,7 +2,6 @@ package com.example.Onskeskyen.controllers;
 
 import com.example.Onskeskyen.models.Bruger;
 import com.example.Onskeskyen.services.BrugerService;
-import com.example.Onskeskyen.services.OnskeService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,17 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Optional;
-
 @Controller
 public class BrugerController {
 
     private final BrugerService services;
-    private final OnskeService onskeService;
 
-    public BrugerController(BrugerService services, OnskeService onskeService) {
+    public BrugerController(BrugerService services) {
         this.services = services;
-        this.onskeService = onskeService;
     }
 
     @GetMapping({"/", "/index"})
@@ -43,12 +38,14 @@ public class BrugerController {
 
         if (gyldigLogin) {
             Bruger bruger = services.findBrugerByEmail(email);
-            if(bruger !=null) {
+
+            if (bruger != null) {
                 session.setAttribute("brugerId", bruger.getBrugerId());
-                session.setAttribute("loggetIndEmail", email);
+                session.setAttribute("loggetIndEmail", bruger.getEmail());
+                session.setAttribute("loggetIndNavn", bruger.getNavn());
                 return "redirect:/onskeliste";
-            }else {
-                model.addAttribute("fejl", "brugeren blev ikke fundet");
+            } else {
+                model.addAttribute("fejl", "Brugeren blev ikke fundet");
                 return "login";
             }
         } else {
@@ -61,54 +58,27 @@ public class BrugerController {
     public String opretBruger(@RequestParam String navn,
                               @RequestParam String email,
                               @RequestParam String kodeord,
-                              HttpSession session) {
+                              HttpSession session,
+                              Model model) {
 
         services.opretBruger(navn, email, kodeord);
-        session.setAttribute("loggetIndEmail", email);
-        return "redirect:/onskeliste";
-    }
-
-    @GetMapping("/onskeliste")
-    public String visOnskeliste(HttpSession session, Model model) {
-        String email = (String) session.getAttribute("loggetIndEmail");
-
-        if (email == null) {
-            return "redirect:/login";
-        }
 
         Bruger bruger = services.findBrugerByEmail(email);
 
-        if (bruger == null) {
-            return "redirect:/login";
+        if (bruger != null) {
+            session.setAttribute("brugerId", bruger.getBrugerId());
+            session.setAttribute("loggetIndEmail", bruger.getEmail());
+            session.setAttribute("loggetIndNavn", bruger.getNavn());
+            return "redirect:/onskeliste";
+        } else {
+            model.addAttribute("fejl", "Brugeren kunne ikke oprettes");
+            return "login";
         }
-
-        model.addAttribute("bruger", bruger);
-        model.addAttribute("onsker", onskeService.hentOnsker(bruger.getBrugerId()));
-
-        return "onskeliste";
     }
 
-    @PostMapping("/tilfoej-onske")
-    public String tilfoejOnske(@RequestParam String navn,
-                               @RequestParam String link,
-                               @RequestParam double pris,
-                               @RequestParam(required = false) String billede,
-                               HttpSession session) {
-
-        String email = (String) session.getAttribute("loggetIndEmail");
-
-        if (email == null) {
-            return "redirect:/login";
-        }
-
-        Bruger bruger = services.findBrugerByEmail(email);
-
-        if (bruger == null) {
-            return "redirect:/login";
-        }
-
-        onskeService.opretOnske(bruger.getBrugerId(), navn, link, pris, billede);
-
-        return "redirect:/onskeliste";
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/index";
     }
 }
