@@ -22,4 +22,15 @@ public class OnskeService {
     public void opretOnske(int brugerId, String navn, String link, double pris, String billede) {
         onskeRepository.opretOnske(brugerId, navn, link, pris, billede);
     }
+    public List<Onske> hentOnskerForListe(int onskelisteId) {
+        return onskeRepository.hentOnskerForListe(onskelisteId);
+    }
+
+    public void opretOnskeTilListe(int onskelisteId, String navn, String link, double pris, String billede) {
+        onskeRepository.opretOnskeTilListe(onskelisteId, navn, link, pris, billede);
+    }
+
+    public void deleteOnskeById(int onskeId) {
+        onskeRepository.deleteOnskeById(onskeId);
+    }
 }

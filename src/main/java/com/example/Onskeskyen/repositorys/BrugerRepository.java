@@ -162,4 +162,5 @@ public class BrugerRepository {
 
         return Optional.empty();
     }
+    
 }

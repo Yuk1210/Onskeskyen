@@ -110,4 +110,85 @@ public class OnskeRepository {
             e.printStackTrace();
         }
     }
+    public List<Onske> hentOnskerForListe(int onskelisteId) {
+        List<Onske> onsker = new ArrayList<>();
+
+        String sql = """
+        SELECT oi.ønskeliste_item_id, ø.ejer_bruger_id, p.navn, p.produkt_link, p.pris, p.billede_link, oi.købt
+        FROM ønskeliste_item oi
+        JOIN ønskeliste ø ON oi.ønskeliste_id = ø.ønskeliste_id
+        JOIN produkt p ON oi.produkt_id = p.produkt_id
+        WHERE oi.ønskeliste_id = ?
+    """;
+
+        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, onskelisteId);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                Onske onske = new Onske(
+                        rs.getInt("ønskeliste_item_id"),
+                        rs.getInt("ejer_bruger_id"),
+                        rs.getString("navn"),
+                        rs.getString("produkt_link"),
+                        rs.getDouble("pris"),
+                        rs.getString("billede_link"),
+                        rs.getBoolean("købt")
+                );
+
+                onsker.add(onske);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return onsker;
+    }
+    public void opretOnskeTilListe(int onskelisteId, String navn, String link, double pris, String billede) {
+        String opretProduktSql = "INSERT INTO produkt (navn, pris, produkt_link, billede_link) VALUES (?, ?, ?, ?)";
+        String opretItemSql = "INSERT INTO ønskeliste_item (ønskeliste_id, produkt_id, købt, dato) VALUES (?, ?, false, CURDATE())";
+
+        try (Connection connection = DriverManager.getConnection(dbUrl, username, password)) {
+
+            int produktId = -1;
+
+            try (PreparedStatement statement = connection.prepareStatement(opretProduktSql, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, navn);
+                statement.setDouble(2, pris);
+                statement.setString(3, link);
+                statement.setString(4, billede);
+                statement.executeUpdate();
+
+                ResultSet keys = statement.getGeneratedKeys();
+                if (keys.next()) {
+                    produktId = keys.getInt(1);
+                }
+            }
+
+            try (PreparedStatement statement = connection.prepareStatement(opretItemSql)) {
+                statement.setInt(1, onskelisteId);
+                statement.setInt(2, produktId);
+                statement.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void deleteOnskeById(int onskeId) {
+        String sql = "DELETE FROM ønskeliste_item WHERE ønskeliste_item_id = ?";
+
+        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, onskeId);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
