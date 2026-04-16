@@ -10,14 +10,14 @@
 
 <header>
     <div class="top-bar">
-        <h1>Mine ønskelister</h1>
+        <h1>Ønskeskyen</h1>
     </div>
 </header>
 
 <nav class="main-nav">
     <div class="nav-left">
         <a href="/" class="nav-link">Forside</a>
-        <a href="/onskeliste" class="nav-link">Min ønskeliste</a>
+        <a href="/profil" class="nav-link">Profil</a>
         <a href="/onskelister" class="nav-link">Ønskelister</a>
         <a href="#opret-liste" class="login-btn">Opret ønskeliste</a>
     </div>
@@ -69,7 +69,7 @@
 
                     <div class="wish-meta">
                         Beskrivelse:
-                        <span th:text="${liste.beskrivelse}">Beskrivelse</span>
+                        <span th:text="${liste.beskrivelse} ?: 'Ingen beskrivelse'">Beskrivelse</span>
                     </div>
 
                     <div class="wish-meta">
@@ -77,13 +77,17 @@
                         <span th:text="${liste.offentlig} ? 'Ja' : 'Nej'">Ja</span>
                     </div>
 
-                    <div class="wish-meta">
+                    <div class="wish-meta" th:if="${liste.delingslink != null and !#strings.isEmpty(liste.delingslink)}">
                         Delingslink:
                         <a th:href="${liste.delingslink}" th:text="${liste.delingslink}" target="_blank"></a>
                     </div>
 
                     <div style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap;">
                         <a th:href="@{/onskelister/{id}(id=${liste.onskelisteId})}" class="login-btn">Åbn</a>
+
+                        <a th:if="${liste.offentlig}"
+                           th:href="@{/onskelister/delt/{id}(id=${liste.onskelisteId})}"
+                           class="nav-link-btn">Offentlig visning</a>
 
                         <form action="/slet-onskeliste" method="post" style="display:inline;">
                             <input type="hidden" name="id" th:value="${liste.onskelisteId}">

@@ -2,22 +2,26 @@ package com.example.Onskeskyen.models;
 
 public class Onske {
     private int onskeId;
-    private int brugerId;
+    private int onskelisteId;
     private String navn;
-    private String link;
+    private String beskrivelse;
+    private String produktLink;
     private double pris;
-    private String billede;
-    private int reserveretAfBrugerId;
-    private boolean booket;
+    private String billedeLink;
+    private boolean kobt;
 
-    public Onske(int onskeId, int brugerId, String navn, String link, double pris, String billede, boolean booket) {
+    public Onske() {
+    }
+
+    public Onske(int onskeId, int onskelisteId, String navn, String beskrivelse, String produktLink, double pris, String billedeLink, boolean kobt) {
         this.onskeId = onskeId;
-        this.brugerId = brugerId;
+        this.onskelisteId = onskelisteId;
         this.navn = navn;
-        this.link = link;
+        this.beskrivelse = beskrivelse;
+        this.produktLink = produktLink;
         this.pris = pris;
-        this.billede = billede;
-        this.booket = booket;
+        this.billedeLink = billedeLink;
+        this.kobt = kobt;
     }
 
     public int getOnskeId() {
@@ -28,12 +32,12 @@ public class Onske {
         this.onskeId = onskeId;
     }
 
-    public int getBrugerId() {
-        return brugerId;
+    public int getOnskelisteId() {
+        return onskelisteId;
     }
 
-    public void setBrugerId(int brugerId) {
-        this.brugerId = brugerId;
+    public void setOnskelisteId(int onskelisteId) {
+        this.onskelisteId = onskelisteId;
     }
 
     public String getNavn() {
@@ -44,12 +48,20 @@ public class Onske {
         this.navn = navn;
     }
 
-    public String getLink() {
-        return link;
+    public String getBeskrivelse() {
+        return beskrivelse;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setBeskrivelse(String beskrivelse) {
+        this.beskrivelse = beskrivelse;
+    }
+
+    public String getProduktLink() {
+        return produktLink;
+    }
+
+    public void setProduktLink(String produktLink) {
+        this.produktLink = produktLink;
     }
 
     public double getPris() {
@@ -60,27 +72,19 @@ public class Onske {
         this.pris = pris;
     }
 
-    public String getBillede() {
-        return billede;
+    public String getBilledeLink() {
+        return billedeLink;
     }
 
-    public void setBillede(String billede) {
-        this.billede = billede;
+    public void setBilledeLink(String billedeLink) {
+        this.billedeLink = billedeLink;
     }
 
-    public Integer getReserveretAfBrugerId() {
-        return reserveretAfBrugerId;
+    public boolean isKobt() {
+        return kobt;
     }
 
-    public void setReserveretAfBrugerId(Integer reserveretAfBrugerId) {
-        this.reserveretAfBrugerId = reserveretAfBrugerId;
-    }
-
-    public boolean isBooket() {
-        return booket;
-    }
-
-    public void setBooket(boolean booket) {
-        this.booket = booket;
+    public void setKobt(boolean kobt) {
+        this.kobt = kobt;
     }
 }

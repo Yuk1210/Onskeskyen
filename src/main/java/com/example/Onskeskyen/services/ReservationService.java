@@ -10,39 +10,32 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository repository;
+
     public ReservationService(ReservationRepository repository) {
         this.repository = repository;
     }
 
-    public boolean opretReservation(int item_id, int bruger_id, int antal) {
-
-        // Tjek om allerede reserveret
-        if (tjekOmReserveret(item_id)) {
-            return false; // allerede reserveret
-        }
-
-        repository.save(new Reservation(item_id, bruger_id, antal));
-        return true; // succes
+    public void save(Reservation reservation) {
+        repository.save(reservation);
     }
 
-    public void sletReservation(int item_id, int bruger_id) {
-        repository.delete(item_id, bruger_id);
+    public Reservation findByOnskeId(int onskeId) {
+        return repository.findByOnskeId(onskeId);
     }
 
-    public boolean tjekOmReserveret(int item_id) {
-        return !repository.findByItem(item_id).isEmpty();
+    public List<Reservation> findByBrugerId(int brugerId) {
+        return repository.findByBrugerId(brugerId);
     }
 
-    public Reservation hentReservation(int itemId) {
-
-        List<Reservation> reservationer = repository.findByItem(itemId);
-
-        if (reservationer.isEmpty()) {
-            return null;
-        }
-
-        return reservationer.get(0);
+    public boolean erReserveret(int onskeId) {
+        return repository.erReserveret(onskeId);
     }
 
+    public void deleteByOnskeId(int onskeId) {
+        repository.deleteByOnskeId(onskeId);
+    }
 
+    public void deleteByOnskeIdAndBrugerId(int onskeId, int brugerId) {
+        repository.deleteByOnskeIdAndBrugerId(onskeId, brugerId);
+    }
 }

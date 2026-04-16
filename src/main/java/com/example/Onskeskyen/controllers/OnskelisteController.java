@@ -13,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class OnskelisteController {
@@ -53,7 +55,6 @@ public class OnskelisteController {
         return "onskelister";
     }
 
-
     @GetMapping("/opret-onskeliste")
     public String visOpretOnskeliste(HttpSession session) {
         Integer brugerId = (Integer) session.getAttribute("brugerId");
@@ -65,10 +66,9 @@ public class OnskelisteController {
         return "opret-onskeliste";
     }
 
-
     @PostMapping("/opret-onskeliste")
     public String opretOnskeliste(@RequestParam String titel,
-                                  @RequestParam String beskrivelse,
+                                  @RequestParam(required = false) String beskrivelse,
                                   @RequestParam(defaultValue = "false") boolean offentlig,
                                   HttpSession session) {
 
@@ -88,7 +88,7 @@ public class OnskelisteController {
 
         onskelisteService.save(liste);
 
-        String delingslink = "http://localhost:8080/onskelister/" + liste.getOnskelisteId();
+        String delingslink = "http://localhost:8080/onskelister/delt/" + liste.getOnskelisteId();
         onskelisteService.updateDelingslinkById(liste.getOnskelisteId(), delingslink);
         liste.setDelingslink(delingslink);
 
@@ -116,18 +116,72 @@ public class OnskelisteController {
             return "redirect:/onskelister";
         }
 
+        if (liste.getBrugerId() != brugerId) {
+            return "redirect:/onskelister";
+        }
+
+        List<Onske> onsker = onskeService.hentOnskerForListe(id);
+        Map<Integer, Reservation> reservationer = new HashMap<>();
+
+        for (Onske onske : onsker) {
+            Reservation reservation = reservationService.findByOnskeId(onske.getOnskeId());
+            if (reservation != null) {
+                reservationer.put(onske.getOnskeId(), reservation);
+            }
+        }
+
         model.addAttribute("bruger", bruger);
         model.addAttribute("onskeliste", liste);
         model.addAttribute("onskelisteId", id);
-        model.addAttribute("onsker", onskeService.hentOnskerForListe(id));
+        model.addAttribute("onsker", onsker);
+        model.addAttribute("reservationer", reservationer);
 
         return "onskeliste-detalje";
     }
 
+    @GetMapping("/onskelister/delt/{id}")
+    public String visDeltOnskeliste(@PathVariable int id,
+                                    HttpSession session,
+                                    Model model) {
+
+        Onskeliste liste = onskelisteService.findById(id);
+
+        if (liste == null) {
+            return "redirect:/index";
+        }
+
+        if (!liste.isOffentlig()) {
+            return "redirect:/index";
+        }
+
+        List<Onske> onsker = onskeService.hentOnskerForListe(id);
+        Map<Integer, Reservation> reservationer = new HashMap<>();
+
+        for (Onske onske : onsker) {
+            Reservation reservation = reservationService.findByOnskeId(onske.getOnskeId());
+            if (reservation != null) {
+                reservationer.put(onske.getOnskeId(), reservation);
+            }
+        }
+
+        Integer brugerId = (Integer) session.getAttribute("brugerId");
+        boolean erLoggetInd = brugerId != null;
+        boolean erEjer = erLoggetInd && brugerId == liste.getBrugerId();
+
+        model.addAttribute("onskeliste", liste);
+        model.addAttribute("onsker", onsker);
+        model.addAttribute("reservationer", reservationer);
+        model.addAttribute("erLoggetInd", erLoggetInd);
+        model.addAttribute("erEjer", erEjer);
+        model.addAttribute("brugerId", brugerId);
+
+        return "onskeliste-delt";
+    }
 
     @PostMapping("/onskelister/{id}/tilfoej-onske")
     public String tilfoejOnske(@PathVariable int id,
                                @RequestParam String navn,
+                               @RequestParam(required = false) String beskrivelse,
                                @RequestParam String link,
                                @RequestParam double pris,
                                @RequestParam(required = false) String billede,
@@ -139,11 +193,15 @@ public class OnskelisteController {
             return "redirect:/login";
         }
 
-        onskeService.opretOnskeTilListe(id, navn, link, pris, billede);
+        Onskeliste liste = onskelisteService.findById(id);
+        if (liste == null || liste.getBrugerId() != brugerId) {
+            return "redirect:/onskelister";
+        }
+
+        onskeService.opretOnskeTilListe(id, navn, beskrivelse, link, pris, billede);
 
         return "redirect:/onskelister/" + id;
     }
-
 
     @PostMapping("/slet-onskeliste")
     public String sletOnskeliste(@RequestParam int id, HttpSession session) {
@@ -153,11 +211,15 @@ public class OnskelisteController {
             return "redirect:/login";
         }
 
+        Onskeliste liste = onskelisteService.findById(id);
+        if (liste == null || liste.getBrugerId() != brugerId) {
+            return "redirect:/onskelister";
+        }
+
         onskelisteService.deleteById(id);
 
         return "redirect:/onskelister";
     }
-
 
     @PostMapping("/onskelister/{listeId}/slet-onske")
     public String sletOnske(@PathVariable int listeId,
@@ -168,6 +230,11 @@ public class OnskelisteController {
 
         if (brugerId == null) {
             return "redirect:/login";
+        }
+
+        Onskeliste liste = onskelisteService.findById(listeId);
+        if (liste == null || liste.getBrugerId() != brugerId) {
+            return "redirect:/onskelister";
         }
 
         onskeService.deleteOnskeById(onskeId);

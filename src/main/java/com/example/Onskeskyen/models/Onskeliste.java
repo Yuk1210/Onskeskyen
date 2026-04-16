@@ -12,10 +12,10 @@ public class Onskeliste {
     private String delingslink;
     private LocalDateTime oprettetDato;
 
-    public Onskeliste(int onskelisteId, int brugerId, String titel,
-                      String beskrivelse, boolean offentlig,
-                      String delingslink, LocalDateTime oprettetDato) {
+    public Onskeliste() {
+    }
 
+    public Onskeliste(int onskelisteId, int brugerId, String titel, String beskrivelse, boolean offentlig, String delingslink, LocalDateTime oprettetDato) {
         this.onskelisteId = onskelisteId;
         this.brugerId = brugerId;
         this.titel = titel;
@@ -25,9 +25,7 @@ public class Onskeliste {
         this.oprettetDato = oprettetDato;
     }
 
-    public Onskeliste(int brugerId, String titel, String beskrivelse,
-                      boolean offentlig, String delingslink) {
-
+    public Onskeliste(int brugerId, String titel, String beskrivelse, boolean offentlig, String delingslink) {
         this.brugerId = brugerId;
         this.titel = titel;
         this.beskrivelse = beskrivelse;
@@ -36,51 +34,59 @@ public class Onskeliste {
         this.oprettetDato = LocalDateTime.now();
     }
 
-    public void setOnskelisteId(int onskelisteId) {
-        this.onskelisteId = onskelisteId;
-    }
-
-    public void setDelingslink(String delingslink) {
-        this.delingslink = delingslink;
-    }
-
     public int getOnskelisteId() {
         return onskelisteId;
+    }
+
+    public void setOnskelisteId(int onskelisteId) {
+        this.onskelisteId = onskelisteId;
     }
 
     public int getBrugerId() {
         return brugerId;
     }
 
+    public void setBrugerId(int brugerId) {
+        this.brugerId = brugerId;
+    }
+
     public String getTitel() {
         return titel;
-    }
-
-    public String getBeskrivelse() {
-        return beskrivelse;
-    }
-
-    public boolean isOffentlig() {
-        return offentlig;
-    }
-
-    public String getDelingslink() {
-        return delingslink;
-    }
-
-    public LocalDateTime getOprettetDato() {
-        return oprettetDato;
     }
 
     public void setTitel(String titel) {
         this.titel = titel;
     }
 
+    public String getBeskrivelse() {
+        return beskrivelse;
+    }
+
     public void setBeskrivelse(String beskrivelse) {
         this.beskrivelse = beskrivelse;
     }
 
+    public boolean isOffentlig() {
+        return offentlig;
+    }
+
     public void setOffentlig(boolean offentlig) {
         this.offentlig = offentlig;
+    }
+
+    public String getDelingslink() {
+        return delingslink;
+    }
+
+    public void setDelingslink(String delingslink) {
+        this.delingslink = delingslink;
+    }
+
+    public LocalDateTime getOprettetDato() {
+        return oprettetDato;
+    }
+
+    public void setOprettetDato(LocalDateTime oprettetDato) {
+        this.oprettetDato = oprettetDato;
     }
 }

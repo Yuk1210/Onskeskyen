@@ -24,7 +24,6 @@ public class BrugerService {
         return brugerRepository.findById(brugerId).orElse(null);
     }
 
-
     public void opretBruger(String navn, String email, String kodeord) {
         Bruger bruger = new Bruger(0, navn, email, kodeord, LocalDateTime.now());
         brugerRepository.save(bruger);
@@ -42,21 +41,20 @@ public class BrugerService {
         email = email.trim();
         kodeord = kodeord.trim();
 
-        System.out.println("Login email: " + email);
         Bruger bruger = findBrugerByEmail(email);
 
         if (bruger == null) {
-            System.out.println("bruger blev ikke fundet i DB");
             return false;
         }
-
-        System.out.println("DB email: " + bruger.getEmail());
-        System.out.println("DB kodeord: " + bruger.getKodeord());
 
         return bruger.getKodeord().equals(kodeord);
     }
 
     public Bruger findBrugerByEmail(String email) {
         return brugerRepository.findByEmail(email).orElse(null);
+    }
+
+    public Bruger findByEmailAndKodeord(String email, String kodeord) {
+        return brugerRepository.findByEmailAndKodeord(email, kodeord).orElse(null);
     }
 }

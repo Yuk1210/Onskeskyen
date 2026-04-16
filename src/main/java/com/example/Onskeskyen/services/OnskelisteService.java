@@ -19,6 +19,10 @@ public class OnskelisteService {
         return onskelisteRepository.findByBrugerId(brugerId);
     }
 
+    public List<Onskeliste> findAllOffentlige() {
+        return onskelisteRepository.findAllOffentlige();
+    }
+
     public void save(Onskeliste liste) {
         onskelisteRepository.save(liste);
     }
@@ -30,9 +34,15 @@ public class OnskelisteService {
     public void deleteById(int id) {
         onskelisteRepository.deleteById(id);
     }
+
     public Onskeliste findById(int id) {
         return onskelisteRepository.findById(id);
     }
+
+    public Onskeliste findByDelingslink(String delingslink) {
+        return onskelisteRepository.findByDelingslink(delingslink);
+    }
+
     public void updateDelingslinkById(int id, String delingslink) {
         onskelisteRepository.updateDelingslinkById(id, delingslink);
     }

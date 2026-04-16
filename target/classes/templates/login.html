@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -13,6 +13,9 @@
     <!-- REGISTER FORM -->
     <form id="register" action="/opret" method="post">
         <h2>Opret bruger</h2>
+
+        <!-- FEJL BESKED -->
+        <p th:if="${fejl}" th:text="${fejl}" style="color: red;"></p>
 
         <div class="input-box">
             <input type="text" name="navn" placeholder="Navn" required>
@@ -38,6 +41,9 @@
     <!-- LOGIN FORM -->
     <form id="login" action="/login" method="post">
         <h2>Login</h2>
+
+        <!-- FEJL BESKED -->
+        <p th:if="${fejl}" th:text="${fejl}" style="color: red;"></p>
 
         <div class="input-box">
             <input type="email" name="email" placeholder="Email" required>

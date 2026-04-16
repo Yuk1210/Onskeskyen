@@ -4,81 +4,71 @@ CREATE DATABASE IF NOT EXISTS Onskeskyen
 
 USE Onskeskyen;
 
+DROP TABLE IF EXISTS reservation;
+DROP TABLE IF EXISTS ønske;
+DROP TABLE IF EXISTS ønskeliste;
+DROP TABLE IF EXISTS bruger;
 
 CREATE TABLE IF NOT EXISTS bruger
 (
-    bruger_id INT AUTO_INCREMENT PRIMARY KEY,
-    navn      VARCHAR(100) NOT NULL,
-    email     VARCHAR(50)  NOT NULL,
-    kodeord   VARCHAR(100) NOT NULL,
-    oprettet_dato      DATETIME NULL
-);
-
-CREATE TABLE IF NOT EXISTS kategori
-(
-    kategori_id INT AUTO_INCREMENT PRIMARY KEY,
-    navn        VARCHAR(100) NULL
-);
-
-CREATE TABLE IF NOT EXISTS produkt
-(
-    produkt_id   INT AUTO_INCREMENT PRIMARY KEY,
-    kategori_id  INT NULL,
-    navn         VARCHAR(100) NULL,
-    beskrivelse  VARCHAR(100) NULL,
-    pris         DECIMAL(10, 2) NULL,
-    produkt_link VARCHAR(100) NULL,
-    billede_link VARCHAR(100) NULL,
-    INDEX idx_produkt_kategori_id (kategori_id),
-    CONSTRAINT fk_produkt_kategori
-        FOREIGN KEY (kategori_id) REFERENCES kategori (kategori_id)
+    bruger_id      INT AUTO_INCREMENT PRIMARY KEY,
+    navn           VARCHAR(100) NOT NULL,
+    email          VARCHAR(50) NOT NULL UNIQUE,
+    kodeord        VARCHAR(100) NOT NULL,
+    oprettet_dato  DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS ønskeliste
 (
-    ønskeliste_id  INT AUTO_INCREMENT PRIMARY KEY,
-    ejer_bruger_id INT NULL,
-    titel          VARCHAR(100) NOT NULL,
-    beskrivelse    VARCHAR(100) NULL,
-    offentlig      TINYINT(1) NULL,
-    delingslink    VARCHAR(50) NULL,
-    oprettet_dato           DATETIME NULL,
+    ønskeliste_id   INT AUTO_INCREMENT PRIMARY KEY,
+    ejer_bruger_id  INT NOT NULL,
+    titel           VARCHAR(100) NOT NULL,
+    beskrivelse     VARCHAR(100) NULL,
+    offentlig       TINYINT(1) DEFAULT 1,
+    delingslink     VARCHAR(50) NULL,
+    oprettet_dato   DATETIME DEFAULT CURRENT_TIMESTAMP,
+
     INDEX idx_onskeliste_ejer_bruger_id (ejer_bruger_id),
+
     CONSTRAINT fk_onskeliste_bruger
         FOREIGN KEY (ejer_bruger_id) REFERENCES bruger (bruger_id)
+            ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS ønskeliste_item
+CREATE TABLE IF NOT EXISTS ønske
 (
-    ønskeliste_item_id INT AUTO_INCREMENT PRIMARY KEY,
-    ønskeliste_id      INT NULL,
-    produkt_id         INT NULL,
-    note               VARCHAR(100) NULL,
-    prioritet          INT NULL,
-    antal              INT NULL,
-    købt               TINYINT(1) NULL,
-    dato               DATETIME NULL,
-    INDEX idx_onskeliste_item_onskeliste_id (ønskeliste_id),
-    INDEX idx_onskeliste_item_produkt_id (produkt_id),
-    CONSTRAINT fk_onskeliste_item_onskeliste
-        FOREIGN KEY (ønskeliste_id) REFERENCES ønskeliste (ønskeliste_id),
-    CONSTRAINT fk_onskeliste_item_produkt
-        FOREIGN KEY (produkt_id) REFERENCES produkt (produkt_id)
+    ønske_id        INT AUTO_INCREMENT PRIMARY KEY,
+    ønskeliste_id   INT NOT NULL,
+    navn            VARCHAR(100) NOT NULL,
+    beskrivelse     VARCHAR(100) NULL,
+    pris            DECIMAL(10,2) NULL,
+    produkt_link    VARCHAR(100) NULL,
+    billede_link    VARCHAR(100) NULL,
+    købt            TINYINT(1) DEFAULT 0,
+    dato            DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    INDEX idx_onske_onskeliste_id (ønskeliste_id),
+
+    CONSTRAINT fk_onske_onskeliste
+        FOREIGN KEY (ønskeliste_id) REFERENCES ønskeliste (ønskeliste_id)
+            ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS reservation
 (
-    reservation_id     INT AUTO_INCREMENT PRIMARY KEY,
-    ønskeliste_item_id INT NULL,
-    bruger_id          INT NULL,
-    antal              INT NULL,
-    købt               TINYINT(1) NULL,
-    dato               DATETIME NULL,
-    INDEX idx_reservation_onskeliste_item_id (ønskeliste_item_id),
+    reservation_id  INT AUTO_INCREMENT PRIMARY KEY,
+    ønske_id        INT NOT NULL UNIQUE,
+    bruger_id       INT NOT NULL,
+    dato            DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    INDEX idx_reservation_onske_id (ønske_id),
     INDEX idx_reservation_bruger_id (bruger_id),
-    CONSTRAINT fk_reservation_onskeliste_item
-        FOREIGN KEY (ønskeliste_item_id) REFERENCES ønskeliste_item (ønskeliste_item_id),
+
+    CONSTRAINT fk_reservation_onske
+        FOREIGN KEY (ønske_id) REFERENCES ønske (ønske_id)
+            ON DELETE CASCADE,
+
     CONSTRAINT fk_reservation_bruger
         FOREIGN KEY (bruger_id) REFERENCES bruger (bruger_id)
+            ON DELETE CASCADE
 );
-

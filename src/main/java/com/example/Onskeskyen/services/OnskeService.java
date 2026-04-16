@@ -19,15 +19,32 @@ public class OnskeService {
         return onskeRepository.hentOnsker(brugerId);
     }
 
-    public void opretOnske(int brugerId, String navn, String link, double pris, String billede) {
-        onskeRepository.opretOnske(brugerId, navn, link, pris, billede);
-    }
     public List<Onske> hentOnskerForListe(int onskelisteId) {
         return onskeRepository.hentOnskerForListe(onskelisteId);
     }
 
-    public void opretOnskeTilListe(int onskelisteId, String navn, String link, double pris, String billede) {
-        onskeRepository.opretOnskeTilListe(onskelisteId, navn, link, pris, billede);
+    public Onske findById(int onskeId) {
+        return onskeRepository.findById(onskeId);
+    }
+
+    public void opretOnske(int brugerId, String navn, String beskrivelse, String link, double pris, String billede) {
+        onskeRepository.opretOnske(brugerId, navn, beskrivelse, link, pris, billede);
+    }
+
+    public void opretOnskeTilListe(int onskelisteId, String navn, String beskrivelse, String link, double pris, String billede) {
+        onskeRepository.opretOnskeTilListe(onskelisteId, navn, beskrivelse, link, pris, billede);
+    }
+
+    public void markAsKobt(int onskeId) {
+        onskeRepository.markAsKobt(onskeId);
+    }
+
+    public void markAsNotKobt(int onskeId) {
+        onskeRepository.markAsNotKobt(onskeId);
+    }
+
+    public boolean erKobt(int onskeId) {
+        return onskeRepository.erKobt(onskeId);
     }
 
     public void deleteOnskeById(int onskeId) {
