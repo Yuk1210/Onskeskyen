@@ -1,62 +1,64 @@
 <!DOCTYPE html>
-<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Ønskeskyen</title>
-    <link rel="stylesheet" href="/style.css" th:href="@{/style.css}">
+    <title>Login</title>
+
+    <!-- Link til CSS fil -->
+    <link rel="stylesheet" href="styles_Login.css">
 </head>
+
 <body>
-<main class="login-page">
-    <section class="box login-box">
-        <h2>Bruger</h2>
 
-        <div class="tabs">
-            <button id="loginTab" type="button" class="active-tab" onclick="showLogin()">Login</button>
-            <button id="createTab" type="button" class="secondary" onclick="showCreate()">Opret</button>
+<div class="login-box">
+
+    <!-- REGISTER FORM -->
+    <form id="register">
+        <h2>Opret bruger</h2>
+
+        <div class="input-box">
+            <input type="text" placeholder="Navn" required>
         </div>
 
-        <p class="error" th:if="${fejl}" th:text="${fejl}"></p>
-
-        <div id="loginForm" class="form active">
-            <form th:action="@{/login}" method="post">
-                <input type="text" name="email" placeholder="Email" required>
-                <input type="password" name="kodeord" placeholder="Kodeord" required>
-                <button type="submit">Login</button>
-            </form>
+        <div class="input-box">
+            <input type="email" placeholder="Email" required>
         </div>
 
-        <div id="createForm" class="form">
-            <form th:action="@{/opret}" method="post">
-                <input type="text" name="navn" placeholder="Navn" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="kodeord" placeholder="Kodeord" required>
-                <button type="submit" class="secondary">Opret bruger</button>
-            </form>
+        <div class="input-box">
+            <input type="password" placeholder="Adgangskode" required>
         </div>
-    </section>
-</main>
 
-<script>
-    function showLogin() {
-        document.getElementById("loginForm").classList.add("active");
-        document.getElementById("createForm").classList.remove("active");
+        <button type="submit">Opret</button>
 
-        document.getElementById("loginTab").classList.add("active-tab");
-        document.getElementById("loginTab").classList.remove("secondary");
-        document.getElementById("createTab").classList.remove("active-tab");
-        document.getElementById("createTab").classList.add("secondary");
-    }
+        <div class="register-link">
+            <p>Har du allerede en konto?
+                <a href="#">Login</a>
+            </p>
+        </div>
+    </form>
 
-    function showCreate() {
-        document.getElementById("createForm").classList.add("active");
-        document.getElementById("loginForm").classList.remove("active");
+    <!-- LOGIN FORM -->
+    <form id="login">
+        <h2>Login</h2>
 
-        document.getElementById("createTab").classList.add("active-tab");
-        document.getElementById("createTab").classList.remove("secondary");
-        document.getElementById("loginTab").classList.remove("active-tab");
-        document.getElementById("loginTab").classList.add("secondary");
-    }
-</script>
+        <div class="input-box">
+            <input type="email" placeholder="Email" required>
+        </div>
+
+        <div class="input-box">
+            <input type="password" placeholder="Adgangskode" required>
+        </div>
+
+        <button type="submit">Login</button>
+
+        <div class="register-link">
+            <p>Har du ikke en konto?
+                <a href="#register">Opret bruger</a>
+            </p>
+        </div>
+    </form>
+
+</div>
+
 </body>
 </html>
