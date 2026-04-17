@@ -15,38 +15,39 @@
 
 <nav class="main-nav">
     <div class="nav-left">
-        <a href="/" class="nav-link">Forside</a>
-        <a href="/login" class="nav-link">Login</a>
+        <a th:href="@{/}" class="nav-link">Forside</a>
+        <a th:href="@{/login}" class="nav-link active" th:if="${!erLoggetInd}">Login</a>
+        <a th:href="@{/profil}" class="nav-link active" th:if="${erLoggetInd}">Profil</a>
     </div>
 
     <div class="nav-right" th:if="${erLoggetInd}">
-        <form action="/logout" method="post" class="logout-form">
-            <button type="submit" class="nav-link-btn">Log ud</button>
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="nav-link-btn logout">Log ud</button>
         </form>
     </div>
 </nav>
 
 <main>
-    <section class="box">
+    <section class="box full-width">
         <h2 th:text="${onskeliste.titel}">Ønskeliste</h2>
         <p th:text="${onskeliste.beskrivelse}">Beskrivelse</p>
     </section>
 
-    <section class="box" th:if="${success}">
-        <p style="color: green;" th:text="${success}"></p>
+    <section class="box full-width" th:if="${success}">
+        <p class="message-success" th:text="${success}"></p>
     </section>
 
-    <section class="box" th:if="${fejl}">
-        <p style="color: red;" th:text="${fejl}"></p>
+    <section class="box full-width" th:if="${fejl}">
+        <p class="message-error" th:text="${fejl}"></p>
     </section>
 
-    <section class="box">
+    <section class="box full-width">
         <h2>Ønsker</h2>
 
         <p th:if="${#lists.isEmpty(onsker)}">Der er ingen ønsker på denne liste endnu.</p>
 
-        <ul class="wish-list">
-            <li th:each="onske : ${onsker}" class="available">
+        <ul class="wish-list" th:if="${!#lists.isEmpty(onsker)}">
+            <li th:each="onske : ${onsker}" th:class="${onske.kobt} ? 'booked' : 'available'">
 
                 <span class="wish-title" th:text="${onske.navn}">Navn</span>
 
@@ -59,22 +60,26 @@
                 </div>
 
                 <div class="wish-meta" th:if="${onske.produktLink != null and !#strings.isEmpty(onske.produktLink)}">
-                    <a th:href="${onske.produktLink}" target="_blank">Køb produkt</a>
+                    <a th:href="${onske.produktLink}" target="_blank" class="product-link">Køb produkt</a>
                 </div>
 
                 <div class="wish-meta" th:if="${onske.billedeLink != null and !#strings.isEmpty(onske.billedeLink)}">
-                    <img th:src="${onske.billedeLink}" alt="Produktbillede" style="max-width: 140px; border-radius: 8px;">
+                    <img th:src="${onske.billedeLink}" alt="Produktbillede" class="product-image">
                 </div>
 
-                <span th:if="${onske.kobt}" class="status status-booked">Købt</span>
+                <div>
+                    <span th:if="${onske.kobt}" class="status status-booked">Købt</span>
 
-                <span th:if="${!onske.kobt and reservationer.containsKey(onske.onskeId)}" class="status status-booked">
-                    Reserveret
-                </span>
+                    <span th:if="${!onske.kobt and reservationer.containsKey(onske.onskeId)}" class="status status-booked">
+                        Reserveret
+                    </span>
 
-                <span th:if="${!onske.kobt and !reservationer.containsKey(onske.onskeId)}" class="status status-free">
-                    Ledig
-                </span>
+                    <span th:if="${!onske.kobt and !reservationer.containsKey(onske.onskeId)}" class="status status-free">
+                        Ledig
+                    </span>
+
+                    <span th:if="${onske.kobt or reservationer.containsKey(onske.onskeId)}" class="status-check">✓</span>
+                </div>
 
                 <div th:if="${!erLoggetInd and !onske.kobt}">
                     <p>Log ind for at reservere dette ønske.</p>
@@ -84,21 +89,21 @@
                     <p>Du kan ikke reservere dine egne ønsker.</p>
                 </div>
 
-                <div th:if="${erLoggetInd and !erEjer and !onske.kobt and !reservationer.containsKey(onske.onskeId)}">
-                    <form th:action="@{/reservationer/{onskeId}(onskeId=${onske.onskeId})}" method="post">
-                        <button type="submit" class="login-btn">Reservér</button>
+                <div th:if="${erLoggetInd and !erEjer and !onske.kobt and !reservationer.containsKey(onske.onskeId)}" class="action-row">
+                    <form th:action="@{/reservationer/{onskeId}(onskeId=${onske.onskeId})}" method="post" class="inline-form">
+                        <button type="submit" class="action-btn green-btn">Reservér</button>
                     </form>
                 </div>
 
                 <div th:if="${erLoggetInd and !erEjer and reservationer.containsKey(onske.onskeId) and reservationer.get(onske.onskeId).brugerId == brugerId and !onske.kobt}"
-                     style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                     class="action-row">
 
-                    <form th:action="@{/reservationer/{onskeId}/annuller(onskeId=${onske.onskeId})}" method="post">
-                        <button type="submit" class="nav-link-btn">Annuller reservation</button>
+                    <form th:action="@{/reservationer/{onskeId}/annuller(onskeId=${onske.onskeId})}" method="post" class="inline-form">
+                        <button type="submit" class="action-btn delete-btn">Annuller reservation</button>
                     </form>
 
-                    <form th:action="@{/onsker/{onskeId}/kobt(onskeId=${onske.onskeId})}" method="post">
-                        <button type="submit" class="login-btn">Marker som købt</button>
+                    <form th:action="@{/onsker/{onskeId}/kobt(onskeId=${onske.onskeId})}" method="post" class="inline-form">
+                        <button type="submit" class="action-btn green-btn">Marker som købt</button>
                     </form>
                 </div>
 

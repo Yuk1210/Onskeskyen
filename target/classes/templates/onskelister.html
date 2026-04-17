@@ -16,46 +16,42 @@
 
 <nav class="main-nav">
     <div class="nav-left">
-        <a href="/" class="nav-link">Forside</a>
-        <a href="/profil" class="nav-link">Profil</a>
-        <a href="/onskelister" class="nav-link">Ønskelister</a>
-        <a href="#opret-liste" class="login-btn">Opret ønskeliste</a>
+        <a th:href="@{/}" class="nav-link">Forside</a>
+        <a th:href="@{/profil}" class="nav-link">Profil</a>
+        <a th:href="@{/onskelister}" class="nav-link active">Ønskelister</a>
+        <a href="#opret-liste" class="action-btn green-btn">Opret ønskeliste</a>
     </div>
 
     <div class="nav-right">
-        <form action="/logout" method="post" class="logout-form">
-            <button type="submit" class="nav-link-btn">Log ud</button>
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="nav-link-btn logout">Log ud</button>
         </form>
     </div>
 </nav>
 
 <main>
-    <section class="box" style="grid-column: 1 / -1;">
-        <h2 th:text="'Hej ' + ${bruger.navn}"></h2>
+    <section class="box full-width">
+        <h2 th:text="'Hej ' + ${bruger.navn}">Hej bruger</h2>
         <p>Her kan du se og administrere dine ønskelister.</p>
     </section>
 
-    <section id="opret-liste" class="box" style="grid-column: 1 / -1;">
+    <section id="opret-liste" class="box full-width">
         <h2>Opret ønskeliste</h2>
 
-        <form action="/opret-onskeliste" method="post">
-            <input type="text" name="titel" placeholder="Titel" required>
-            <br><br>
+        <form th:action="@{/opret-onskeliste}" method="post" class="wish-form">
+            <input type="text" name="titel" placeholder="Titel" required class="form-input">
+            <input type="text" name="beskrivelse" placeholder="Beskrivelse" class="form-input">
 
-            <input type="text" name="beskrivelse" placeholder="Beskrivelse">
-            <br><br>
-
-            <label>
+            <label class="checkbox-label">
                 <input type="checkbox" name="offentlig" value="true">
                 Offentlig
             </label>
-            <br><br>
 
-            <button type="submit" class="login-btn">Opret ønskeliste</button>
+            <button type="submit" class="action-btn green-btn">Opret ønskeliste</button>
         </form>
     </section>
 
-    <section class="box" style="grid-column: 1 / -1;">
+    <section class="box full-width">
         <h2>Alle ønskelister</h2>
 
         <div th:if="${#lists.isEmpty(onskelister)}">
@@ -79,19 +75,21 @@
 
                     <div class="wish-meta" th:if="${liste.delingslink != null and !#strings.isEmpty(liste.delingslink)}">
                         Delingslink:
-                        <a th:href="${liste.delingslink}" th:text="${liste.delingslink}" target="_blank"></a>
+                        <a th:href="${liste.delingslink}" th:text="${liste.delingslink}" target="_blank" class="product-link"></a>
                     </div>
 
-                    <div style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap;">
-                        <a th:href="@{/onskelister/{id}(id=${liste.onskelisteId})}" class="login-btn">Åbn</a>
+                    <div class="action-row">
+                        <a th:href="@{/onskelister/{id}(id=${liste.onskelisteId})}" class="action-btn green-btn">Åbn</a>
 
                         <a th:if="${liste.offentlig}"
                            th:href="@{/onskelister/delt/{id}(id=${liste.onskelisteId})}"
-                           class="nav-link-btn">Offentlig visning</a>
+                           class="nav-link">
+                            Offentlig visning
+                        </a>
 
-                        <form action="/slet-onskeliste" method="post" style="display:inline;">
+                        <form th:action="@{/slet-onskeliste}" method="post" class="inline-form">
                             <input type="hidden" name="id" th:value="${liste.onskelisteId}">
-                            <button type="submit" class="nav-link-btn">Slet</button>
+                            <button type="submit" class="action-btn delete-btn">Slet</button>
                         </form>
                     </div>
                 </li>

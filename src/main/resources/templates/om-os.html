@@ -1,39 +1,65 @@
 <!DOCTYPE html>
-<html lang="da" xmlns:th="http://thymeleaf.org">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Om os - Julemanden</title>
-    <link rel="stylesheet" href="/style.css" th:href="@{/style.css}">
+    <title>Om os</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
+
 <body>
+
 <header>
     <div class="top-bar">
-        <h1>Om Julemandens Ønskebog ✨</h1>
+        <h1>Om Ønskeskyen </h1>
     </div>
 </header>
 
-<nav>
-    <a href="/" th:href="@{/}">Forside</a>
-    <a href="/kontakt" th:href="@{/kontakt}">Kontakt</a>
+<nav class="main-nav">
+    <div class="nav-left">
+        <a th:href="@{/}" class="nav-link">Forside</a>
+        <a th:href="@{/om-os}" class="nav-link">Om os</a>
+        <a th:href="@{/kontakt}" class="nav-link">Kontakt</a>
+
+        <a th:if="${session.brugerId != null}" th:href="@{/profil}" class="nav-link">
+            Profil
+        </a>
+    </div>
+
+    <div class="nav-right">
+        <a th:if="${session.brugerId == null}" th:href="@{/login}" class="login-btn">
+            Login
+        </a>
+
+        <form th:if="${session.brugerId != null}" th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="nav-link-btn">Log ud</button>
+        </form>
+    </div>
 </nav>
 
 <main>
     <section class="box">
         <h2>Hvem er vi?</h2>
-        <p>Her i Julemandens værksted har vi gjort det så legende let at lave en ønskeseddel, at selv din gamle morfar kan finde ud af det – og mon ikke han snart sender sin helt egen ønskeseddel af sted til dig?</p>
+        <p>
+            Ønskeskyen gør det nemt at oprette og dele ønskelister.
+            Vi fokuserer på en enkel og brugervenlig oplevelse.
+        </p>
 
-        <h3>🔒 Tryghed i Julemandens værksted</h3>
-        <p>Du kan stole fuldt og fast på, at jeres oplysninger er låst sikkert inde i mit gavekammer. Vi deler <strong>aldrig</strong> dine data med andre, og de bliver absolut ikke solgt eller givet videre til fremmede. Hos Julemanden passer vi godt på vores venner!</p>
+        <h3> Sikkerhed</h3>
+        <p>
+            Dine oplysninger bliver behandlet sikkert og deles ikke med andre.
+        </p>
 
-        <h3>👶 Til alle mine mindste venner</h3>
-        <p>Hvis du stadig er et barn, skal du lige huske at spørge dine forældre om lov, før du tryller din ønskeseddel frem her på siden.</p>
-        <p>Få også dine forældre til at hjælpe dig med at vælge en god og hemmelig titel på ønskesedlen. Den behøver ikke at afsløre alt for meget om, hvem du er. En titel som <em>"Knuds Ønskeseddel"</em> er helt perfekt!</p>
+        <h3>Formål</h3>
+        <p>
+            Vi vil gøre det nemt at holde styr på ønsker og dele dem med familie og venner.
+        </p>
     </section>
 </main>
 
 <footer>
-    <p>&copy; 2026 Julemandens Ønskebog</p>
+    <p>&copy; 2026 Ønskeskyen</p>
 </footer>
+
 </body>
 </html>
