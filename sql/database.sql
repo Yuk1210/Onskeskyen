@@ -72,3 +72,5 @@ CREATE TABLE IF NOT EXISTS reservation
         FOREIGN KEY (bruger_id) REFERENCES bruger (bruger_id)
             ON DELETE CASCADE
 );
+
+ALTER TABLE ønske MODIFY produkt_link VARCHAR(500);
