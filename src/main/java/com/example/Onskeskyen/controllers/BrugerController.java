@@ -53,7 +53,7 @@ public class BrugerController {
                 session.setAttribute("brugerId", bruger.getBrugerId());
                 session.setAttribute("loggetIndEmail", bruger.getEmail());
                 session.setAttribute("loggetIndNavn", bruger.getNavn());
-                return "redirect:/onskeliste";
+                return "redirect:/profil";
             } else {
                 model.addAttribute("fejl", "Brugeren blev ikke fundet");
                 return "login";
@@ -79,7 +79,7 @@ public class BrugerController {
             session.setAttribute("brugerId", bruger.getBrugerId());
             session.setAttribute("loggetIndEmail", bruger.getEmail());
             session.setAttribute("loggetIndNavn", bruger.getNavn());
-            return "redirect:/onskeliste";
+            return "redirect:/profil";
         } else {
             model.addAttribute("fejl", "Brugeren kunne ikke oprettes");
             return "login";

@@ -9,13 +9,14 @@
 
 <header>
     <div class="top-bar">
-        <h1>Ønskeliste</h1>
+        <h1>Ønskeskyen</h1>
     </div>
 </header>
 
 <nav class="main-nav">
     <div class="nav-left">
         <a href="/" class="nav-link">Forside</a>
+        <a href="/profil" class="nav-link">Profil</a>
         <a href="/onskelister" class="nav-link">Tilbage</a>
     </div>
 
@@ -27,15 +28,23 @@
 </nav>
 
 <main>
+    <section class="box">
+        <h2 th:text="${onskeliste.titel}">Ønskeliste</h2>
+        <p th:text="${onskeliste.beskrivelse}">Beskrivelse</p>
 
-    <!-- TILFØJ ØNSKE -->
+        <p th:if="${onskeliste.offentlig and onskeliste.delingslink != null and !#strings.isEmpty(onskeliste.delingslink)}">
+            Delingslink:
+            <a th:href="${onskeliste.delingslink}" th:text="${onskeliste.delingslink}" target="_blank"></a>
+        </p>
+    </section>
+
     <section class="box">
         <h2>Tilføj ønske</h2>
 
         <form th:action="@{/onskelister/{id}/tilfoej-onske(id=${onskelisteId})}" method="post">
-
             <input type="text" name="navn" placeholder="Navn" required><br><br>
-            <input type="text" name="link" placeholder="Link"><br><br>
+            <input type="text" name="beskrivelse" placeholder="Beskrivelse"><br><br>
+            <input type="text" name="link" placeholder="Produkt link"><br><br>
             <input type="number" step="0.01" name="pris" placeholder="Pris"><br><br>
             <input type="text" name="billede" placeholder="Billede link"><br><br>
 
@@ -43,54 +52,42 @@
         </form>
     </section>
 
-    <!-- ØNSKER -->
     <section class="box">
         <h2>Ønsker</h2>
 
         <p th:if="${#lists.isEmpty(onsker)}">Der er ingen ønsker endnu.</p>
 
         <ul class="wish-list">
+            <li th:each="onske : ${onsker}" class="available">
 
-            <li th:each="onske : ${onsker}"
-                th:classappend="${onske.booket} ? 'booked' : 'available'">
-
-                <!-- NAVN -->
                 <span class="wish-title" th:text="${onske.navn}">Navn</span>
 
-                <!-- PRIS -->
+                <div class="wish-meta" th:if="${onske.beskrivelse != null and !#strings.isEmpty(onske.beskrivelse)}">
+                    Beskrivelse: <span th:text="${onske.beskrivelse}"></span>
+                </div>
+
                 <div class="wish-meta">
                     Pris: <span th:text="${onske.pris}">0</span> kr.
                 </div>
 
-                <!-- LINK -->
-                <div class="wish-meta">
-                    <a th:href="${onske.link}" target="_blank">Se produkt</a>
+                <div class="wish-meta" th:if="${onske.produktLink != null and !#strings.isEmpty(onske.produktLink)}">
+                    <a th:href="${onske.produktLink}" target="_blank">Se produkt</a>
                 </div>
 
-                <!-- STATUS (kun én vises) -->
-                <span th:if="${!onske.booket}" class="status status-free">
-                    Ledig
-                </span>
+                <div class="wish-meta" th:if="${onske.billedeLink != null and !#strings.isEmpty(onske.billedeLink)}">
+                    <img th:src="${onske.billedeLink}" alt="Produktbillede" style="max-width: 140px; border-radius: 8px;">
+                </div>
 
-                <span th:if="${onske.booket}" class="status status-booked">
+                <span th:if="${onske.kobt}" class="status status-booked">Købt</span>
+
+                <span th:if="${!onske.kobt and reservationer.containsKey(onske.onskeId)}" class="status status-booked">
                     Reserveret
                 </span>
 
-                <!-- KUN hvis DU har reserveret -->
-                <div th:if="${onske.booket && onske.reserveretAfBrugerId == currentUserId}">
+                <span th:if="${!onske.kobt and !reservationer.containsKey(onske.onskeId)}" class="status status-free">
+                    Ledig
+                </span>
 
-                    <form th:action="@{/onskelister/{id}/frigiv-onske(id=${onskelisteId})}" method="post">
-                        <input type="hidden" name="onskeId" th:value="${onske.onskeId}">
-                        <button type="submit" class="nav-link-btn">
-                            Slet reservation
-                        </button>
-                    </form>
-
-                </div>
-
-                </div>
-
-                <!-- 🗑️ SLET ØNSKE -->
                 <form th:action="@{/onskelister/{id}/slet-onske(id=${onskelisteId})}" method="post">
                     <input type="hidden" name="onskeId" th:value="${onske.onskeId}">
                     <button type="submit" class="nav-link-btn">Slet</button>
@@ -99,7 +96,6 @@
             </li>
         </ul>
     </section>
-
 </main>
 
 <footer>

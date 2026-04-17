@@ -1,6 +1,7 @@
 package com.example.Onskeskyen.repositorys;
 
 import com.example.Onskeskyen.models.Onske;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -10,22 +11,30 @@ import java.util.List;
 @Repository
 public class OnskeRepository {
 
-    private String dbUrl = System.getenv("DB_URL");
-    private String username = System.getenv("DB_USER");
-    private String password = System.getenv("DB_PASSWORD");
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
+
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(dbUrl, username, password);
+    }
 
     public List<Onske> hentOnsker(int brugerId) {
         List<Onske> onsker = new ArrayList<>();
 
         String sql = """
-            SELECT oi.ønskeliste_item_id, ø.ejer_bruger_id, p.navn, p.produkt_link, p.pris, p.billede_link, oi.købt
-            FROM ønskeliste_item oi
-            JOIN ønskeliste ø ON oi.ønskeliste_id = ø.ønskeliste_id
-            JOIN produkt p ON oi.produkt_id = p.produkt_id
-            WHERE ø.ejer_bruger_id = ?
+            SELECT ø.ønske_id, ø.ønskeliste_id, ø.navn, ø.beskrivelse, ø.produkt_link, ø.pris, ø.billede_link, ø.købt
+            FROM ønske ø
+            JOIN ønskeliste l ON ø.ønskeliste_id = l.ønskeliste_id
+            WHERE l.ejer_bruger_id = ?
         """;
 
-        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, brugerId);
@@ -33,9 +42,10 @@ public class OnskeRepository {
 
             while (rs.next()) {
                 Onske onske = new Onske(
-                        rs.getInt("ønskeliste_item_id"),
-                        rs.getInt("ejer_bruger_id"),
+                        rs.getInt("ønske_id"),
+                        rs.getInt("ønskeliste_id"),
                         rs.getString("navn"),
+                        rs.getString("beskrivelse"),
                         rs.getString("produkt_link"),
                         rs.getDouble("pris"),
                         rs.getString("billede_link"),
@@ -52,13 +62,82 @@ public class OnskeRepository {
         return onsker;
     }
 
-    public void opretOnske(int brugerId, String navn, String link, double pris, String billede) {
-        String findListeSql = "SELECT ønskeliste_id FROM ønskeliste WHERE ejer_bruger_id = ? LIMIT 1";
-        String opretListeSql = "INSERT INTO ønskeliste (ejer_bruger_id, titel, offentlig, dato) VALUES (?, ?, ?, CURDATE())";
-        String opretProduktSql = "INSERT INTO produkt (navn, pris, produkt_link, billede_link) VALUES (?, ?, ?, ?)";
-        String opretItemSql = "INSERT INTO ønskeliste_item (ønskeliste_id, produkt_id, købt, dato) VALUES (?, ?, false, CURDATE())";
+    public List<Onske> hentOnskerForListe(int onskelisteId) {
+        List<Onske> onsker = new ArrayList<>();
 
-        try (Connection connection = DriverManager.getConnection(dbUrl, username, password)) {
+        String sql = """
+            SELECT ønske_id, ønskeliste_id, navn, beskrivelse, produkt_link, pris, billede_link, købt
+            FROM ønske
+            WHERE ønskeliste_id = ?
+        """;
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, onskelisteId);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                Onske onske = new Onske(
+                        rs.getInt("ønske_id"),
+                        rs.getInt("ønskeliste_id"),
+                        rs.getString("navn"),
+                        rs.getString("beskrivelse"),
+                        rs.getString("produkt_link"),
+                        rs.getDouble("pris"),
+                        rs.getString("billede_link"),
+                        rs.getBoolean("købt")
+                );
+
+                onsker.add(onske);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return onsker;
+    }
+
+    public Onske findById(int onskeId) {
+        String sql = """
+            SELECT ønske_id, ønskeliste_id, navn, beskrivelse, produkt_link, pris, billede_link, købt
+            FROM ønske
+            WHERE ønske_id = ?
+        """;
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, onskeId);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                return new Onske(
+                        rs.getInt("ønske_id"),
+                        rs.getInt("ønskeliste_id"),
+                        rs.getString("navn"),
+                        rs.getString("beskrivelse"),
+                        rs.getString("produkt_link"),
+                        rs.getDouble("pris"),
+                        rs.getString("billede_link"),
+                        rs.getBoolean("købt")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public void opretOnske(int brugerId, String navn, String beskrivelse, String link, double pris, String billede) {
+        String findListeSql = "SELECT ønskeliste_id FROM ønskeliste WHERE ejer_bruger_id = ? LIMIT 1";
+        String opretListeSql = "INSERT INTO ønskeliste (ejer_bruger_id, titel, beskrivelse, offentlig, delingslink, oprettet_dato) VALUES (?, ?, ?, ?, ?, NOW())";
+        String opretOnskeSql = "INSERT INTO ønske (ønskeliste_id, navn, beskrivelse, produkt_link, pris, billede_link, købt, dato) VALUES (?, ?, ?, ?, ?, ?, false, NOW())";
+
+        try (Connection connection = getConnection()) {
 
             int ønskelisteId = -1;
 
@@ -75,7 +154,9 @@ public class OnskeRepository {
                 try (PreparedStatement statement = connection.prepareStatement(opretListeSql, Statement.RETURN_GENERATED_KEYS)) {
                     statement.setInt(1, brugerId);
                     statement.setString(2, "Min ønskeliste");
-                    statement.setBoolean(3, true);
+                    statement.setString(3, null);
+                    statement.setBoolean(4, true);
+                    statement.setString(5, null);
                     statement.executeUpdate();
 
                     ResultSet keys = statement.getGeneratedKeys();
@@ -85,24 +166,13 @@ public class OnskeRepository {
                 }
             }
 
-            int produktId = -1;
-
-            try (PreparedStatement statement = connection.prepareStatement(opretProduktSql, Statement.RETURN_GENERATED_KEYS)) {
-                statement.setString(1, navn);
-                statement.setDouble(2, pris);
-                statement.setString(3, link);
-                statement.setString(4, billede);
-                statement.executeUpdate();
-
-                ResultSet keys = statement.getGeneratedKeys();
-                if (keys.next()) {
-                    produktId = keys.getInt(1);
-                }
-            }
-
-            try (PreparedStatement statement = connection.prepareStatement(opretItemSql)) {
+            try (PreparedStatement statement = connection.prepareStatement(opretOnskeSql)) {
                 statement.setInt(1, ønskelisteId);
-                statement.setInt(2, produktId);
+                statement.setString(2, navn);
+                statement.setString(3, beskrivelse);
+                statement.setString(4, link);
+                statement.setDouble(5, pris);
+                statement.setString(6, billede);
                 statement.executeUpdate();
             }
 
@@ -110,78 +180,82 @@ public class OnskeRepository {
             e.printStackTrace();
         }
     }
-    public List<Onske> hentOnskerForListe(int onskelisteId) {
-        List<Onske> onsker = new ArrayList<>();
 
+    public void opretOnskeTilListe(int onskelisteId, String navn, String beskrivelse, String link, double pris, String billede) {
         String sql = """
-        SELECT oi.ønskeliste_item_id, ø.ejer_bruger_id, p.navn, p.produkt_link, p.pris, p.billede_link, oi.købt
-        FROM ønskeliste_item oi
-        JOIN ønskeliste ø ON oi.ønskeliste_id = ø.ønskeliste_id
-        JOIN produkt p ON oi.produkt_id = p.produkt_id
-        WHERE oi.ønskeliste_id = ?
-    """;
+            INSERT INTO ønske (ønskeliste_id, navn, beskrivelse, produkt_link, pris, billede_link, købt, dato)
+            VALUES (?, ?, ?, ?, ?, ?, false, NOW())
+        """;
 
-        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, onskelisteId);
+            statement.setString(2, navn);
+            statement.setString(3, beskrivelse);
+            statement.setString(4, link);
+            statement.setDouble(5, pris);
+            statement.setString(6, billede);
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void markAsKobt(int onskeId) {
+        String sql = "UPDATE ønske SET købt = true WHERE ønske_id = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, onskeId);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void markAsNotKobt(int onskeId) {
+        String sql = "UPDATE ønske SET købt = false WHERE ønske_id = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, onskeId);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean erKobt(int onskeId) {
+        String sql = "SELECT købt FROM ønske WHERE ønske_id = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, onskeId);
             ResultSet rs = statement.executeQuery();
 
-            while (rs.next()) {
-                Onske onske = new Onske(
-                        rs.getInt("ønskeliste_item_id"),
-                        rs.getInt("ejer_bruger_id"),
-                        rs.getString("navn"),
-                        rs.getString("produkt_link"),
-                        rs.getDouble("pris"),
-                        rs.getString("billede_link"),
-                        rs.getBoolean("købt")
-                );
-
-                onsker.add(onske);
+            if (rs.next()) {
+                return rs.getBoolean("købt");
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return onsker;
+        return false;
     }
-    public void opretOnskeTilListe(int onskelisteId, String navn, String link, double pris, String billede) {
-        String opretProduktSql = "INSERT INTO produkt (navn, pris, produkt_link, billede_link) VALUES (?, ?, ?, ?)";
-        String opretItemSql = "INSERT INTO ønskeliste_item (ønskeliste_id, produkt_id, købt, dato) VALUES (?, ?, false, CURDATE())";
 
-        try (Connection connection = DriverManager.getConnection(dbUrl, username, password)) {
-
-            int produktId = -1;
-
-            try (PreparedStatement statement = connection.prepareStatement(opretProduktSql, Statement.RETURN_GENERATED_KEYS)) {
-                statement.setString(1, navn);
-                statement.setDouble(2, pris);
-                statement.setString(3, link);
-                statement.setString(4, billede);
-                statement.executeUpdate();
-
-                ResultSet keys = statement.getGeneratedKeys();
-                if (keys.next()) {
-                    produktId = keys.getInt(1);
-                }
-            }
-
-            try (PreparedStatement statement = connection.prepareStatement(opretItemSql)) {
-                statement.setInt(1, onskelisteId);
-                statement.setInt(2, produktId);
-                statement.executeUpdate();
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     public void deleteOnskeById(int onskeId) {
-        String sql = "DELETE FROM ønskeliste_item WHERE ønskeliste_item_id = ?";
+        String sql = "DELETE FROM ønske WHERE ønske_id = ?";
 
-        try (Connection connection = DriverManager.getConnection(dbUrl, username, password);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, onskeId);

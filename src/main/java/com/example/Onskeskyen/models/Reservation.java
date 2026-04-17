@@ -1,22 +1,59 @@
 package com.example.Onskeskyen.models;
 
+import java.time.LocalDateTime;
+
 public class Reservation {
 
-    private int itemId;
+    private int reservationId;
+    private int onskeId;
     private int brugerId;
-    private int antal;
+    private LocalDateTime dato;
 
-    public Reservation(int itemId, int brugerId, int antal) {
-        this.itemId = itemId;
+    public Reservation() {
+    }
+
+    public Reservation(int reservationId, int onskeId, int brugerId, LocalDateTime dato) {
+        this.reservationId = reservationId;
+        this.onskeId = onskeId;
         this.brugerId = brugerId;
-        this.antal = antal;
+        this.dato = dato;
     }
 
-    public String visReservationStatus() {
-        return "Reserveret: " + antal;
+    public Reservation(int onskeId, int brugerId) {
+        this.onskeId = onskeId;
+        this.brugerId = brugerId;
+        this.dato = LocalDateTime.now();
     }
 
-    public int getItemId() { return itemId; }
-    public int getBrugerId() { return brugerId; }
-    public int getAntal() { return antal; }
+    public int getReservationId() {
+        return reservationId;
+    }
+
+    public void setReservationId(int reservationId) {
+        this.reservationId = reservationId;
+    }
+
+    public int getOnskeId() {
+        return onskeId;
+    }
+
+    public void setOnskeId(int onskeId) {
+        this.onskeId = onskeId;
+    }
+
+    public int getBrugerId() {
+        return brugerId;
+    }
+
+    public void setBrugerId(int brugerId) {
+        this.brugerId = brugerId;
+    }
+
+    public LocalDateTime getDato() {
+        return dato;
+    }
+
+    public void setDato(LocalDateTime dato) {
+        this.dato = dato;
+    }
 }
