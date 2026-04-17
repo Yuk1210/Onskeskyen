@@ -29,7 +29,7 @@
 
     <!-- LOGOUT -->
     <div class="nav-right">
-        <form action="/logout" method="post" class="logout-form">
+        <form th:if="${session.brugerId != null}" action="/logout" method="post" class="logout-form">
             <button type="submit" class="nav-link-btn">Log ud</button>
         </form>
     </div>
